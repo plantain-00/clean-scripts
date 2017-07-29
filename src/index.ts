@@ -40,8 +40,12 @@ async function executeCommandLine() {
 }
 
 try {
-    executeCommandLine();
-    printInConsole("success.");
+    executeCommandLine().then(() => {
+        printInConsole("success.");
+    }, error => {
+        printInConsole(error.stdout);
+        process.exit(error.status);
+    });
 } catch (error) {
     printInConsole(error.stdout);
     process.exit(error.status);
