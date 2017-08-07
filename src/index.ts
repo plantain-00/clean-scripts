@@ -39,6 +39,7 @@ async function execAsync(script: string) {
     return new Promise<string>((resolve, reject) => {
         childProcess.exec(script, { encoding: "utf8" }, (error, stdout, stderr) => {
             if (error) {
+                (error as any).stdout = stdout;
                 reject(error);
             } else {
                 resolve(stdout);
