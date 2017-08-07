@@ -17,3 +17,9 @@ A CLI tool to make scripts in package.json clean.
 run `clean-scripts script-name`
 
 or run `clean-scripts script-name --config clean-scripts.config.js`
+
+#### features
+
++ `script array`: executed with order
++ `script Set or Object`: executed without order
++ `script array` and `script Set or Object` can be nested
