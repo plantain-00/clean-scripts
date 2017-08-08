@@ -4,13 +4,13 @@
   "description": "A CLI tool to make scripts in package.json clean.",
   "main": "index.js",
   "scripts": {
-    "build": "'./bin/clean-scripts' build",
-    "lint": "'./bin/clean-scripts' lint",
-    "test": "'./bin/clean-scripts' test",
-    "fix": "'./bin/clean-scripts' fix",
-    "release": "'./bin/clean-scripts' release",
-    "lint:ts": "'./bin/clean-scripts' lint.ts",
-    "test[0]": "'./bin/clean-scripts' test[0]"
+    "build": "node dist/index.js build",
+    "lint": "node dist/index.js lint",
+    "test": "node dist/index.js test",
+    "fix": "node dist/index.js fix",
+    "release": "node dist/index.js release",
+    "lint:ts": "node dist/index.js lint.ts",
+    "test[0]": "node dist/index.js test[0]"
   },
   "repository": {
     "type": "git",
