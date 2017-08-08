@@ -10,7 +10,7 @@
     "demoTest": "./bin/clean-scripts build",
     "test": "tsc -p spec && jasmine",
     "standard": "standard \"**/*.config.js\"",
-    "fix": "standard --fix \"**/*.config.js\"",
+    "fix": "tslint --fix \"src/**/*.ts\" && standard --fix \"**/*.config.js\"",
     "release": "clean-release",
     "build": "npm run clean && npm run tsc",
     "lint": "npm run tslint && npm run standard"
