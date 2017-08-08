@@ -14,12 +14,101 @@ A CLI tool to make scripts in package.json clean.
 
 #### usage
 
-run `clean-scripts script-name`
+create config file(named `clean-scripts.config.js` or something else) like:
 
-or run `clean-scripts script-name --config clean-scripts.config.js`
+```js
+module.exports = {
+    build: "tsc",
+    lint: "tslint index.ts"
+}
+```
+
+run `clean-scripts build`, or `clean-scripts lint`
+
+or `clean-scripts build --config clean-scripts.config.js`
 
 #### features
 
-+ `script array`: executed with order
-+ `script Set or Object`: executed without order
-+ `script array` and `script Set or Object` can be nested
+##### string script
+
+```js
+module.exports = {
+    build: "tsc"
+}
+```
+
+##### array script
+
++ executed one by one with order
++ used when later script depends on previous script's success
+
+```js
+module.exports = {
+    build: [
+        "rimraf dist",
+        "tsc"
+    ]
+}
+```
+
+##### `Set` or `Object` script
+
++ executed collaterally without order
++ used when the scripts are irrelated
++ they are all started at first time, when they are all done, it's a success, otherwise exit current process
+
+```js
+module.exports = {
+    build: {
+        js: `tsc`,
+        css: `cleancss -o index.bundle.css index.css`
+    }
+}
+```
+
+##### nested script
+
+```js
+module.exports = {
+    build: [
+        "rimraf dist",
+        {
+            js: `tsc`,
+            css: [
+                `lessc index.less > index.css`,
+                `cleancss -o index.bundle.css index.css`
+            ]
+        }
+    ]
+}
+```
+
+##### `Promise` script
+
+```js
+module.exports = {
+    build: new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('abc')
+      }, 1000)
+    })
+}
+```
+
+##### child script
+
+```js
+module.exports = {
+  build: [
+    `rimraf dist/`,
+    `tsc -p src/`
+  ],
+  lint: {
+    ts: `tslint "src/**/*.ts"`,
+    js: `standard "**/*.config.js"`
+  }
+}
+```
+
++ run `clean-scripts build[0]` to run `rimraf dist/`
++ run `clean-scripts lint.ts` to run `tslint "src/**/*.ts"`

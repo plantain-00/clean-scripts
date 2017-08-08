@@ -1,10 +1,19 @@
 module.exports = {
   build: [
-    `sleep 1 && echo clean`,
-    {
-      js: `sleep 2 && echo js`,
-      css: `sleep 1 && echo css`
-    },
-    `sleep 1 && echo bundle`
-  ]
+    `rimraf dist/`,
+    `tsc -p src/`
+  ],
+  lint: {
+    ts: `tslint "src/**/*.ts"`,
+    js: `standard "**/*.config.js"`
+  },
+  test: [
+    `tsc -p spec`,
+    `jasmine`
+  ],
+  fix: {
+    ts: `tslint --fix "src/**/*.ts"`,
+    js: `standard --fix "**/*.config.js"`
+  },
+  release: `clean-release`
 }

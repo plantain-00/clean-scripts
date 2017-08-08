@@ -4,16 +4,13 @@
   "description": "A CLI tool to make scripts in package.json clean.",
   "main": "index.js",
   "scripts": {
-    "clean": "rimraf dist/",
-    "tsc": "tsc -p src/",
-    "tslint": "tslint \"src/**/*.ts\"",
-    "demoTest": "./bin/clean-scripts build",
-    "test": "tsc -p spec && jasmine",
-    "standard": "standard \"**/*.config.js\"",
-    "fix": "tslint --fix \"src/**/*.ts\" && standard --fix \"**/*.config.js\"",
-    "release": "clean-release",
-    "build": "npm run clean && npm run tsc",
-    "lint": "npm run tslint && npm run standard"
+    "build": "./bin/clean-scripts build",
+    "lint": "./bin/clean-scripts lint",
+    "test": "./bin/clean-scripts test",
+    "fix": "./bin/clean-scripts fix",
+    "release": "./bin/clean-scripts release",
+    "lint:ts": "./bin/clean-scripts lint.ts",
+    "test[0]": "./bin/clean-scripts test[0]"
   },
   "repository": {
     "type": "git",
