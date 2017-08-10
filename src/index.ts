@@ -37,14 +37,17 @@ async function executeCommandLine() {
 }
 
 async function execAsync(script: string) {
-    return new Promise<string>((resolve, reject) => {
-        childProcess.exec(script, { encoding: "utf8" }, (error, stdout, stderr) => {
+    return new Promise<void>((resolve, reject) => {
+        const subProcess = childProcess.exec(script, { encoding: "utf8" }, (error, stdout, stderr) => {
             if (error) {
                 (error as any).stdout = stdout;
                 reject(error);
             } else {
-                resolve(stdout);
+                resolve();
             }
+        });
+        subProcess.stdout.on("data", chunk => {
+            printInConsole(chunk);
         });
     });
 }
@@ -54,8 +57,7 @@ type Script = string | Promise<string> | any[] | Set<any> | { [name: string]: an
 async function executeScript(script: Script) {
     if (typeof script === "string") {
         printInConsole(script);
-        const stdout = await execAsync(script);
-        printInConsole(stdout);
+        await execAsync(script);
     } else if (Array.isArray(script)) {
         for (const child of script) {
             await executeScript(child);

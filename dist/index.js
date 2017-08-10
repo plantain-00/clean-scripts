@@ -32,22 +32,24 @@ async function executeCommandLine() {
 }
 async function execAsync(script) {
     return new Promise((resolve, reject) => {
-        childProcess.exec(script, { encoding: "utf8" }, (error, stdout, stderr) => {
+        const subProcess = childProcess.exec(script, { encoding: "utf8" }, (error, stdout, stderr) => {
             if (error) {
                 error.stdout = stdout;
                 reject(error);
             }
             else {
-                resolve(stdout);
+                resolve();
             }
+        });
+        subProcess.stdout.on("data", chunk => {
+            printInConsole(chunk);
         });
     });
 }
 async function executeScript(script) {
     if (typeof script === "string") {
         printInConsole(script);
-        const stdout = await execAsync(script);
-        printInConsole(stdout);
+        await execAsync(script);
     }
     else if (Array.isArray(script)) {
         for (const child of script) {
