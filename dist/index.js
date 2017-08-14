@@ -34,7 +34,6 @@ async function execAsync(script) {
     return new Promise((resolve, reject) => {
         const subProcess = childProcess.exec(script, { encoding: "utf8" }, (error, stdout, stderr) => {
             if (error) {
-                error.stdout = stdout;
                 reject(error);
             }
             else {
@@ -80,23 +79,11 @@ try {
     executeCommandLine().then(() => {
         printInConsole("success.");
     }, error => {
-        if (error.stdout) {
-            printInConsole(error.stdout);
-            process.exit(error.status);
-        }
-        else {
-            printInConsole(error);
-            process.exit(1);
-        }
+        printInConsole(error);
+        process.exit(1);
     });
 }
 catch (error) {
-    if (error.stdout) {
-        printInConsole(error.stdout);
-        process.exit(error.status);
-    }
-    else {
-        printInConsole(error);
-        process.exit(1);
-    }
+    printInConsole(error);
+    process.exit(1);
 }
