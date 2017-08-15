@@ -45,13 +45,12 @@ async function execAsync(script: string) {
                 resolve();
             }
         });
-        subProcess.stdout.on("data", chunk => {
-            printInConsole(chunk);
-        });
+        subProcess.stdout.pipe(process.stdout);
+        subProcess.stderr.pipe(process.stderr);
     });
 }
 
-type Script = string | Promise<string> | any[] | Set<any> | { [name: string]: any };
+type Script = string | (() => Promise<void>) | any[] | Set<any> | { [name: string]: any };
 
 async function executeScript(script: Script) {
     if (typeof script === "string") {
@@ -67,27 +66,22 @@ async function executeScript(script: Script) {
             promises.push(executeScript(child));
         }
         await Promise.all(promises);
-    } else if (script instanceof Promise) {
-        const stdout = await script;
-        printInConsole(stdout);
+    } else if (script instanceof Function) {
+        await script();
     } else {
         const promises: Promise<void>[] = [];
-        // tslint:disable-next-line:forin
         for (const key in script) {
-            promises.push(executeScript(script[key]));
+            if (script.hasOwnProperty(key)) {
+                promises.push(executeScript(script[key]));
+            }
         }
         await Promise.all(promises);
     }
 }
 
-try {
-    executeCommandLine().then(() => {
-        printInConsole("success.");
-    }, error => {
-        printInConsole(error);
-        process.exit(1);
-    });
-} catch (error) {
+executeCommandLine().then(() => {
+    printInConsole("script success.");
+}, error => {
     printInConsole(error);
     process.exit(1);
-}
+});

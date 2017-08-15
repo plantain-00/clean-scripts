@@ -87,7 +87,7 @@ module.exports = {
 
 ```js
 module.exports = {
-    build: new Promise((resolve, reject) => {
+    build: () => new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve('abc')
       }, 1000)
