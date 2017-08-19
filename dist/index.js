@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const minimist = require("minimist");
 const childProcess = require("child_process");
 const path = require("path");
+const prettyMs = require("pretty-ms");
 const packageJson = require("../package.json");
 const defaultConfigName = "clean-scripts.config.js";
 function printInConsole(message) {
@@ -27,17 +28,25 @@ async function executeCommandLine() {
         if (!scriptValues) {
             throw new Error(`Unknown script name: ${scriptName}`);
         }
-        await executeScript(scriptValues);
+        const times = await executeScript(scriptValues);
+        const totalTime = times.reduce((p, c) => p + c.time, 0);
+        printInConsole(`----------------total: ${prettyMs(totalTime)}----------------`);
+        for (const { time, script } of times) {
+            const pecent = Math.round(100.0 * time / totalTime);
+            printInConsole(`${prettyMs(time)} ${pecent}% ${script}`);
+        }
+        printInConsole(`----------------total: ${prettyMs(totalTime)}----------------`);
     }
 }
 async function execAsync(script) {
     return new Promise((resolve, reject) => {
+        const now = Date.now();
         const subProcess = childProcess.exec(script, { encoding: "utf8" }, (error, stdout, stderr) => {
             if (error) {
                 reject(error);
             }
             else {
-                resolve();
+                resolve(Date.now() - now);
             }
         });
         subProcess.stdout.pipe(process.stdout);
@@ -47,22 +56,38 @@ async function execAsync(script) {
 async function executeScript(script) {
     if (typeof script === "string") {
         printInConsole(script);
-        await execAsync(script);
+        const time = await execAsync(script);
+        return [{ time, script }];
     }
     else if (Array.isArray(script)) {
+        const times = [];
         for (const child of script) {
-            await executeScript(child);
+            const time = await executeScript(child);
+            times.push(...time);
         }
+        return times;
     }
     else if (script instanceof Set) {
         const promises = [];
         for (const child of script) {
             promises.push(executeScript(child));
         }
-        await Promise.all(promises);
+        const times = await Promise.all(promises);
+        let result = [];
+        let maxTotalTime = 0;
+        for (const time of times) {
+            const totalTime = time.reduce((p, c) => p + c.time, 0);
+            if (totalTime > maxTotalTime) {
+                result = time;
+                maxTotalTime = totalTime;
+            }
+        }
+        return result;
     }
     else if (script instanceof Function) {
+        const now = Date.now();
         await script();
+        return [{ time: Date.now() - now, script: "Custom Promise" }];
     }
     else {
         const promises = [];
@@ -71,7 +96,17 @@ async function executeScript(script) {
                 promises.push(executeScript(script[key]));
             }
         }
-        await Promise.all(promises);
+        const times = await Promise.all(promises);
+        let result = [];
+        let maxTotalTime = 0;
+        for (const time of times) {
+            const totalTime = time.reduce((p, c) => p + c.time, 0);
+            if (totalTime > maxTotalTime) {
+                result = time;
+                maxTotalTime = totalTime;
+            }
+        }
+        return result;
     }
 }
 executeCommandLine().then(() => {
