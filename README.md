@@ -83,15 +83,20 @@ module.exports = {
 }
 ```
 
-##### `Promise` script
+##### custom function script
+
+the type of the function should be `() => Promise<void>`
 
 ```js
 module.exports = {
     build: () => new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve('abc')
-      }, 1000)
-    })
+        setTimeout(() => {
+            resolve()
+        }, 1000)
+    }),
+    test: async () => {
+        // todo
+    }
 }
 ```
 
@@ -99,14 +104,14 @@ module.exports = {
 
 ```js
 module.exports = {
-  build: [
-    `rimraf dist/`,
-    `tsc -p src/`
-  ],
-  lint: {
-    ts: `tslint "src/**/*.ts"`,
-    js: `standard "**/*.config.js"`
-  }
+    build: [
+        `rimraf dist/`,
+        `tsc -p src/`
+    ],
+    lint: {
+        ts: `tslint "src/**/*.ts"`,
+        js: `standard "**/*.config.js"`
+    }
 }
 ```
 
