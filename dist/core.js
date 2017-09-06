@@ -10,10 +10,13 @@ exports.sleep = sleep;
 /**
  * @public
  */
-function readableStreamEnd(stream) {
+function readableStreamEnd(readable) {
     return new Promise((resolve, reject) => {
-        stream.on("end", () => {
+        readable.on("end", () => {
             resolve();
+        });
+        readable.on("error", error => {
+            reject(error);
         });
     });
 }

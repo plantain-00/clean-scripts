@@ -10,10 +10,13 @@ import * as stream from "stream";
 /**
  * @public
  */
-export function readableStreamEnd(stream: stream.Readable) {
+export function readableStreamEnd(readable: stream.Readable) {
     return new Promise<void>((resolve, reject) => {
-        stream.on("end", () => {
+        readable.on("end", () => {
             resolve();
+        });
+        readable.on("error", error => {
+            reject(error);
         });
     });
 }
