@@ -1,7 +1,9 @@
 const childProcess = require('child_process')
+const { sleep } = require('./dist/core.js')
 
 module.exports = {
   build: [
+    () => sleep(1000),
     `rimraf dist/`,
     `tsc -p src/`
   ],

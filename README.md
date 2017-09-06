@@ -117,3 +117,15 @@ module.exports = {
 
 + run `clean-scripts build[0]` to run `rimraf dist/`
 + run `clean-scripts lint.ts` to run `tslint "src/**/*.ts"`
+
+##### short-hand sleep
+
+```js
+const { sleep } = require('clean-scripts')
+
+module.exports = {
+  build: [
+    () => sleep(5000)
+  ]
+}
+```
