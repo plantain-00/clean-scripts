@@ -118,14 +118,21 @@ module.exports = {
 + run `clean-scripts build[0]` to run `rimraf dist/`
 + run `clean-scripts lint.ts` to run `tslint "src/**/*.ts"`
 
-##### short-hand sleep
+##### short-hand methods
 
 ```js
-const { sleep } = require('clean-scripts')
+const { sleep, readableStreamEnd } = require('clean-scripts')
 
 module.exports = {
   build: [
-    () => sleep(5000)
+    () => sleep(5000),
+    async () => {
+        const readable = getReadableStreamSomehow()
+        readable.on('data', chunk => {
+            console.log(`Received ${chunk.length} bytes of data.`)
+        })
+        await readableStreamEnd(readable)
+    }
   ]
 }
 ```
