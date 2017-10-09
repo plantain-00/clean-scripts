@@ -1,8 +1,9 @@
 {
   "name": "clean-scripts",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "A CLI tool to make scripts in package.json clean.",
   "main": "dist/core.js",
+  "types": "dist/core.d.ts",
   "scripts": {
     "build": "node dist/index.js build",
     "lint": "node dist/index.js lint",
