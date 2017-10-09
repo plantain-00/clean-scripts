@@ -21,3 +21,12 @@ function readableStreamEnd(readable) {
     });
 }
 exports.readableStreamEnd = readableStreamEnd;
+/**
+ * @public
+ */
+class Service {
+    constructor(script) {
+        this.script = script;
+    }
+}
+exports.Service = Service;

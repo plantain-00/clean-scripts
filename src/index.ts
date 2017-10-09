@@ -2,6 +2,7 @@ import * as minimist from "minimist";
 import * as childProcess from "child_process";
 import * as path from "path";
 import * as prettyMs from "pretty-ms";
+import * as core from "./core";
 import * as packageJson from "../package.json";
 
 const defaultConfigName = "clean-scripts.config.js";
@@ -44,6 +45,8 @@ async function executeCommandLine() {
     }
 }
 
+const scriptProcesses: childProcess.ChildProcess[] = [];
+
 async function execAsync(script: string) {
     return new Promise<number>((resolve, reject) => {
         const now = Date.now();
@@ -56,10 +59,11 @@ async function execAsync(script: string) {
         });
         subProcess.stdout.pipe(process.stdout);
         subProcess.stderr.pipe(process.stderr);
+        scriptProcesses.push(subProcess);
     });
 }
 
-type Script = string | (() => Promise<void>) | any[] | Set<any> | { [name: string]: any };
+type Script = string | (() => Promise<void>) | any[] | Set<any> | core.Service | { [name: string]: any };
 type Time = { time: number, script: string };
 
 async function executeScript(script: Script): Promise<Time[]> {
@@ -90,6 +94,11 @@ async function executeScript(script: Script): Promise<Time[]> {
             }
         }
         return result;
+    } else if (script instanceof core.Service) {
+        printInConsole(script.script);
+        const now = Date.now();
+        execAsync(script.script);
+        return [{ time: Date.now() - now, script: script.script }];
     } else if (script instanceof Function) {
         const now = Date.now();
         await script();
@@ -116,8 +125,14 @@ async function executeScript(script: Script): Promise<Time[]> {
 }
 
 executeCommandLine().then(() => {
+    for (const subProcess of scriptProcesses) {
+        subProcess.kill("SIGINT");
+    }
     printInConsole("script success.");
 }, error => {
     printInConsole(error);
+    for (const subProcess of scriptProcesses) {
+        subProcess.kill("SIGINT");
+    }
     process.exit(1);
 });

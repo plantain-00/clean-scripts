@@ -118,6 +118,20 @@ module.exports = {
 + run `clean-scripts build[0]` to run `rimraf dist/`
 + run `clean-scripts lint.ts` to run `tslint "src/**/*.ts"`
 
+##### start service
+
+```js
+const { Service } = require('clean-scripts')
+
+module.exports = {
+  build: [
+    new Service('http-server')
+  ]
+}
+```
+
+All created processes / services will be killed after all scripts end, or any script errors.
+
 ##### short-hand methods
 
 ```js

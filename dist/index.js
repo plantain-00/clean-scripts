@@ -4,6 +4,7 @@ const minimist = require("minimist");
 const childProcess = require("child_process");
 const path = require("path");
 const prettyMs = require("pretty-ms");
+const core = require("./core");
 const packageJson = require("../package.json");
 const defaultConfigName = "clean-scripts.config.js";
 function printInConsole(message) {
@@ -38,6 +39,7 @@ async function executeCommandLine() {
         printInConsole(`----------------total: ${prettyMs(totalTime)}----------------`);
     }
 }
+const scriptProcesses = [];
 async function execAsync(script) {
     return new Promise((resolve, reject) => {
         const now = Date.now();
@@ -51,6 +53,7 @@ async function execAsync(script) {
         });
         subProcess.stdout.pipe(process.stdout);
         subProcess.stderr.pipe(process.stderr);
+        scriptProcesses.push(subProcess);
     });
 }
 async function executeScript(script) {
@@ -84,6 +87,12 @@ async function executeScript(script) {
         }
         return result;
     }
+    else if (script instanceof core.Service) {
+        printInConsole(script.script);
+        const now = Date.now();
+        execAsync(script.script);
+        return [{ time: Date.now() - now, script: script.script }];
+    }
     else if (script instanceof Function) {
         const now = Date.now();
         await script();
@@ -110,8 +119,14 @@ async function executeScript(script) {
     }
 }
 executeCommandLine().then(() => {
+    for (const subProcess of scriptProcesses) {
+        subProcess.kill("SIGINT");
+    }
     printInConsole("script success.");
 }, error => {
     printInConsole(error);
+    for (const subProcess of scriptProcesses) {
+        subProcess.kill("SIGINT");
+    }
     process.exit(1);
 });
