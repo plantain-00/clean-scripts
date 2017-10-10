@@ -41,7 +41,19 @@ async function executeCommandLine() {
 }
 const serviceProcesses = [];
 const context = {};
-async function execAsync(script, processKey) {
+async function spawnAsync(command, args, options, processKey) {
+    return new Promise((resolve, reject) => {
+        const subProcess = childProcess.spawn(command, args, options);
+        subProcess.stdout.pipe(process.stdout);
+        subProcess.stderr.pipe(process.stderr);
+        if (processKey) {
+            context[processKey] = subProcess;
+            serviceProcesses.push(subProcess);
+        }
+        resolve();
+    });
+}
+async function execAsync(script) {
     return new Promise((resolve, reject) => {
         const now = Date.now();
         const subProcess = childProcess.exec(script, { encoding: "utf8" }, (error, stdout, stderr) => {
@@ -54,10 +66,6 @@ async function execAsync(script, processKey) {
         });
         subProcess.stdout.pipe(process.stdout);
         subProcess.stderr.pipe(process.stderr);
-        if (processKey) {
-            context[processKey] = subProcess;
-            serviceProcesses.push(subProcess);
-        }
     });
 }
 async function executeScript(script) {
@@ -93,8 +101,9 @@ async function executeScript(script) {
     }
     else if (script instanceof core.Service) {
         printInConsole(script.script);
+        const scriptParts = script.script.split(" ");
         const now = Date.now();
-        execAsync(script.script, script.processKey);
+        spawnAsync(scriptParts[0], scriptParts.slice(1), undefined, script.processKey);
         return [{ time: Date.now() - now, script: script.script }];
     }
     else if (script instanceof Function) {
