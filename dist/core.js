@@ -25,8 +25,9 @@ exports.readableStreamEnd = readableStreamEnd;
  * @public
  */
 class Service {
-    constructor(script) {
+    constructor(script, processKey) {
         this.script = script;
+        this.processKey = processKey;
     }
 }
 exports.Service = Service;

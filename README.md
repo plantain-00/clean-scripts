@@ -85,7 +85,7 @@ module.exports = {
 
 ##### custom function script
 
-the type of the function should be `() => Promise<void>`
+the type of the function should be `(context: { [key: string]: any }) => Promise<void>`
 
 ```js
 module.exports = {
@@ -97,6 +97,23 @@ module.exports = {
     test: async () => {
         // todo
     }
+}
+```
+
+The `context` can be used to transfer data between different scripts.
+
+```js
+module.exports = {
+    build: [
+        context => {
+            context.foo = 'abc'
+            return Promise.resolve()
+        },
+        context => {
+            console.log(context.foo) // 'abc'
+            return Promise.resolve()
+        }
+    ]
 }
 ```
 
@@ -125,12 +142,13 @@ const { Service } = require('clean-scripts')
 
 module.exports = {
   build: [
-    new Service('http-server')
+    new Service('http-server -p 8000'),
+    new Service('http-server', 'server2') // the child process can be accessed by `context.server2` later
   ]
 }
 ```
 
-All created processes / services will be killed after all scripts end, or any script errors.
+All services will be killed after all scripts end, or any script errors.
 
 ##### short-hand methods
 

@@ -39,8 +39,9 @@ async function executeCommandLine() {
         printInConsole(`----------------total: ${prettyMs(totalTime)}----------------`);
     }
 }
-const scriptProcesses = [];
-async function execAsync(script) {
+const serviceProcesses = [];
+const context = {};
+async function execAsync(script, processKey) {
     return new Promise((resolve, reject) => {
         const now = Date.now();
         const subProcess = childProcess.exec(script, { encoding: "utf8" }, (error, stdout, stderr) => {
@@ -53,7 +54,10 @@ async function execAsync(script) {
         });
         subProcess.stdout.pipe(process.stdout);
         subProcess.stderr.pipe(process.stderr);
-        scriptProcesses.push(subProcess);
+        if (processKey) {
+            context[processKey] = subProcess;
+            serviceProcesses.push(subProcess);
+        }
     });
 }
 async function executeScript(script) {
@@ -90,12 +94,12 @@ async function executeScript(script) {
     else if (script instanceof core.Service) {
         printInConsole(script.script);
         const now = Date.now();
-        execAsync(script.script);
+        execAsync(script.script, script.processKey);
         return [{ time: Date.now() - now, script: script.script }];
     }
     else if (script instanceof Function) {
         const now = Date.now();
-        await script();
+        await script(context);
         return [{ time: Date.now() - now, script: "Custom Promise" }];
     }
     else {
@@ -119,13 +123,13 @@ async function executeScript(script) {
     }
 }
 executeCommandLine().then(() => {
-    for (const subProcess of scriptProcesses) {
+    for (const subProcess of serviceProcesses) {
         subProcess.kill("SIGINT");
     }
     printInConsole("script success.");
 }, error => {
     printInConsole(error);
-    for (const subProcess of scriptProcesses) {
+    for (const subProcess of serviceProcesses) {
         subProcess.kill("SIGINT");
     }
     process.exit(1);

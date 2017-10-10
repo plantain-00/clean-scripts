@@ -25,5 +25,5 @@ export function readableStreamEnd(readable: stream.Readable) {
  * @public
  */
 export class Service {
-    constructor(public script: string) { }
+    constructor(public script: string, public processKey?: string) { }
 }

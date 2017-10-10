@@ -13,5 +13,6 @@ export declare function readableStreamEnd(readable: stream.Readable): Promise<vo
  */
 export declare class Service {
     script: string;
-    constructor(script: string);
+    processKey: string | undefined;
+    constructor(script: string, processKey?: string | undefined);
 }
