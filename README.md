@@ -148,7 +148,7 @@ module.exports = {
 }
 ```
 
-All services will be killed after all scripts end, or any script errors.
+All services will be killed(send `SIGINT` actually) after all scripts end, or any script errors.
 
 ##### short-hand methods
 
