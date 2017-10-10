@@ -48,20 +48,7 @@ async function executeCommandLine() {
 const serviceProcesses: childProcess.ChildProcess[] = [];
 const context: { [key: string]: any } = {};
 
-async function spawnAsync(command: string, args?: string[], options?: childProcess.SpawnOptions, processKey?: string) {
-    return new Promise<number>((resolve, reject) => {
-        const subProcess = childProcess.spawn(command, args, options);
-        subProcess.stdout.pipe(process.stdout);
-        subProcess.stderr.pipe(process.stderr);
-        if (processKey) {
-            context[processKey] = subProcess;
-            serviceProcesses.push(subProcess);
-        }
-        resolve();
-    });
-}
-
-async function execAsync(script: string) {
+async function execAsync(script: string, isService: boolean, processKey?: string) {
     return new Promise<number>((resolve, reject) => {
         const now = Date.now();
         const subProcess = childProcess.exec(script, { encoding: "utf8" }, (error, stdout, stderr) => {
@@ -73,6 +60,12 @@ async function execAsync(script: string) {
         });
         subProcess.stdout.pipe(process.stdout);
         subProcess.stderr.pipe(process.stderr);
+        if (processKey) {
+            context[processKey] = subProcess;
+        }
+        if (isService) {
+            serviceProcesses.push(subProcess);
+        }
     });
 }
 
@@ -82,7 +75,7 @@ type Time = { time: number, script: string };
 async function executeScript(script: Script): Promise<Time[]> {
     if (typeof script === "string") {
         printInConsole(script);
-        const time = await execAsync(script);
+        const time = await execAsync(script, false);
         return [{ time, script }];
     } else if (Array.isArray(script)) {
         const times: Time[] = [];
@@ -109,9 +102,8 @@ async function executeScript(script: Script): Promise<Time[]> {
         return result;
     } else if (script instanceof core.Service) {
         printInConsole(script.script);
-        const scriptParts = script.script.split(" ");
         const now = Date.now();
-        spawnAsync(scriptParts[0], scriptParts.slice(1), undefined, script.processKey);
+        execAsync(script.script, true, script.processKey);
         return [{ time: Date.now() - now, script: script.script }];
     } else if (script instanceof Function) {
         const now = Date.now();
@@ -143,6 +135,7 @@ executeCommandLine().then(() => {
         subProcess.kill("SIGINT");
     }
     printInConsole("script success.");
+    process.exit();
 }, error => {
     printInConsole(error);
     for (const subProcess of serviceProcesses) {
