@@ -108,7 +108,7 @@ async function executeScript(script: Script): Promise<Time[]> {
     } else if (script instanceof Function) {
         const now = Date.now();
         await script(context);
-        return [{ time: Date.now() - now, script: "Custom Promise" }];
+        return [{ time: Date.now() - now, script: script.name || "custom function script" }];
     } else {
         const promises: Promise<Time[]>[] = [];
         for (const key in script) {

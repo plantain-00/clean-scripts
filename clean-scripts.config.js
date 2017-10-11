@@ -1,12 +1,10 @@
 const childProcess = require('child_process')
-const { sleep } = require('./dist/core.js')
 const util = require('util')
 
 const execAsync = util.promisify(childProcess.exec)
 
 module.exports = {
   build: [
-    () => sleep(1000),
     `rimraf dist/`,
     `tsc -p src/`
   ],
