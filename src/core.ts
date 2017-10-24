@@ -27,3 +27,11 @@ export function readableStreamEnd(readable: stream.Readable) {
 export class Service {
     constructor(public script: string, public processKey?: string) { }
 }
+
+import * as childProcess from "child_process";
+import * as util from "util";
+
+/**
+ * @public
+ */
+export const execAsync = util.promisify(childProcess.exec);

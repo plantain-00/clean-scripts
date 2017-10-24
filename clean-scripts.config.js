@@ -1,7 +1,4 @@
-const childProcess = require('child_process')
-const util = require('util')
-
-const execAsync = util.promisify(childProcess.exec)
+const { execAsync } = require('./dist/core')
 
 const tsFiles = `"src/**/*.ts" "spec/**/*.ts"`
 const jsFiles = `"*.config.js"`

@@ -85,7 +85,7 @@ module.exports = {
 
 ##### custom function script
 
-the type of the function should be `(context: { [key: string]: any }) => Promise<void>`
+the type of the function should be `(context: { [key: string]: any }, parameters: string[]) => Promise<void>`
 
 ```js
 module.exports = {
@@ -114,6 +114,17 @@ module.exports = {
             return Promise.resolve()
         }
     ]
+}
+```
+
+The `parameters` can be passed from CLI parameters
+
+```js
+module.exports = {
+    build: (context, parameters) => {
+        console.log(parameters) // run `clean-scripts build foo bar`, got `["foo", "bar"]`
+        return Promise.resolve()
+    }
 }
 ```
 
@@ -153,7 +164,7 @@ All services will be killed(send `SIGINT` actually) after all scripts end, or an
 ##### short-hand methods
 
 ```js
-const { sleep, readableStreamEnd } = require('clean-scripts')
+const { sleep, readableStreamEnd, execAsync } = require('clean-scripts')
 
 module.exports = {
   build: [
@@ -164,6 +175,13 @@ module.exports = {
             console.log(`Received ${chunk.length} bytes of data.`)
         })
         await readableStreamEnd(readable)
+    },
+    async () => {
+        const { stdout } = await execAsync('git status -s')
+        if (stdout) {
+            console.log(stdout)
+            throw new Error(`generated files doesn't match.`)
+        }
     }
   ]
 }

@@ -31,3 +31,9 @@ class Service {
     }
 }
 exports.Service = Service;
+const childProcess = require("child_process");
+const util = require("util");
+/**
+ * @public
+ */
+exports.execAsync = util.promisify(childProcess.exec);

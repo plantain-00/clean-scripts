@@ -16,3 +16,8 @@ export declare class Service {
     processKey: string | undefined;
     constructor(script: string, processKey?: string | undefined);
 }
+import * as childProcess from "child_process";
+/**
+ * @public
+ */
+export declare const execAsync: typeof childProcess.exec.__promisify__;

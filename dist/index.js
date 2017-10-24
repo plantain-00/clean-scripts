@@ -23,21 +23,24 @@ async function executeCommandLine() {
     }
     const scripts = require(path.resolve(process.cwd(), argv.config || defaultConfigName));
     const scriptNames = argv._;
-    for (const scriptName of scriptNames) {
-        // tslint:disable-next-line:no-eval
-        const scriptValues = scripts[scriptName] || eval("scripts." + scriptName);
-        if (!scriptValues) {
-            throw new Error(`Unknown script name: ${scriptName}`);
-        }
-        const times = await executeScript(scriptValues);
-        const totalTime = times.reduce((p, c) => p + c.time, 0);
-        printInConsole(`----------------total: ${prettyMs(totalTime)}----------------`);
-        for (const { time, script } of times) {
-            const pecent = Math.round(100.0 * time / totalTime);
-            printInConsole(`${prettyMs(time)} ${pecent}% ${script}`);
-        }
-        printInConsole(`----------------total: ${prettyMs(totalTime)}----------------`);
+    if (!scriptNames || scriptNames.length === 0) {
+        throw new Error(`Need a script`);
     }
+    const scriptName = scriptNames[0];
+    const parameters = scriptNames.slice(1);
+    // tslint:disable-next-line:no-eval
+    const scriptValues = scripts[scriptName] || eval("scripts." + scriptName);
+    if (!scriptValues) {
+        throw new Error(`Unknown script name: ${scriptName}`);
+    }
+    const times = await executeScript(scriptValues, parameters);
+    const totalTime = times.reduce((p, c) => p + c.time, 0);
+    printInConsole(`----------------total: ${prettyMs(totalTime)}----------------`);
+    for (const { time, script } of times) {
+        const pecent = Math.round(100.0 * time / totalTime);
+        printInConsole(`${prettyMs(time)} ${pecent}% ${script}`);
+    }
+    printInConsole(`----------------total: ${prettyMs(totalTime)}----------------`);
 }
 const serviceProcesses = [];
 const context = {};
@@ -62,7 +65,7 @@ async function execAsync(script, isService, processKey) {
         }
     });
 }
-async function executeScript(script) {
+async function executeScript(script, parameters) {
     if (typeof script === "string") {
         printInConsole(script);
         const time = await execAsync(script, false);
@@ -71,7 +74,7 @@ async function executeScript(script) {
     else if (Array.isArray(script)) {
         const times = [];
         for (const child of script) {
-            const time = await executeScript(child);
+            const time = await executeScript(child, parameters);
             times.push(...time);
         }
         return times;
@@ -79,7 +82,7 @@ async function executeScript(script) {
     else if (script instanceof Set) {
         const promises = [];
         for (const child of script) {
-            promises.push(executeScript(child));
+            promises.push(executeScript(child, parameters));
         }
         const times = await Promise.all(promises);
         let result = [];
@@ -101,14 +104,14 @@ async function executeScript(script) {
     }
     else if (script instanceof Function) {
         const now = Date.now();
-        await script(context);
+        await script(context, parameters);
         return [{ time: Date.now() - now, script: script.name || "custom function script" }];
     }
     else {
         const promises = [];
         for (const key in script) {
             if (script.hasOwnProperty(key)) {
-                promises.push(executeScript(script[key]));
+                promises.push(executeScript(script[key], parameters));
             }
         }
         const times = await Promise.all(promises);
