@@ -42,9 +42,9 @@ async function executeCommandLine() {
     }
     printInConsole(`----------------total: ${prettyMs(totalTime)}----------------`);
 }
-const serviceProcesses = [];
+const subProcesses = [];
 const context = {};
-async function execAsync(script, isService, processKey) {
+async function execAsync(script, processKey) {
     return new Promise((resolve, reject) => {
         const now = Date.now();
         const subProcess = childProcess.exec(script, { encoding: "utf8" }, (error, stdout, stderr) => {
@@ -60,15 +60,13 @@ async function execAsync(script, isService, processKey) {
         if (processKey) {
             context[processKey] = subProcess;
         }
-        if (isService) {
-            serviceProcesses.push(subProcess);
-        }
+        subProcesses.push(subProcess);
     });
 }
 async function executeScript(script, parameters) {
     if (typeof script === "string") {
         printInConsole(script);
-        const time = await execAsync(script, false);
+        const time = await execAsync(script);
         return [{ time, script }];
     }
     else if (Array.isArray(script)) {
@@ -99,7 +97,7 @@ async function executeScript(script, parameters) {
     else if (script instanceof core.Service) {
         printInConsole(script.script);
         const now = Date.now();
-        execAsync(script.script, true, script.processKey);
+        execAsync(script.script, script.processKey);
         return [{ time: Date.now() - now, script: script.script }];
     }
     else if (script instanceof Function) {
@@ -128,14 +126,14 @@ async function executeScript(script, parameters) {
     }
 }
 executeCommandLine().then(() => {
-    for (const subProcess of serviceProcesses) {
+    for (const subProcess of subProcesses) {
         subProcess.kill("SIGINT");
     }
     printInConsole("script success.");
     process.exit();
 }, error => {
     printInConsole(error);
-    for (const subProcess of serviceProcesses) {
+    for (const subProcess of subProcesses) {
         subProcess.kill("SIGINT");
     }
     process.exit(1);

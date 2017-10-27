@@ -48,10 +48,10 @@ async function executeCommandLine() {
     printInConsole(`----------------total: ${prettyMs(totalTime)}----------------`);
 }
 
-const serviceProcesses: childProcess.ChildProcess[] = [];
+const subProcesses: childProcess.ChildProcess[] = [];
 const context: { [key: string]: any } = {};
 
-async function execAsync(script: string, isService: boolean, processKey?: string) {
+async function execAsync(script: string, processKey?: string) {
     return new Promise<number>((resolve, reject) => {
         const now = Date.now();
         const subProcess = childProcess.exec(script, { encoding: "utf8" }, (error, stdout, stderr) => {
@@ -66,9 +66,7 @@ async function execAsync(script: string, isService: boolean, processKey?: string
         if (processKey) {
             context[processKey] = subProcess;
         }
-        if (isService) {
-            serviceProcesses.push(subProcess);
-        }
+        subProcesses.push(subProcess);
     });
 }
 
@@ -78,7 +76,7 @@ type Time = { time: number, script: string };
 async function executeScript(script: Script, parameters: string[]): Promise<Time[]> {
     if (typeof script === "string") {
         printInConsole(script);
-        const time = await execAsync(script, false);
+        const time = await execAsync(script);
         return [{ time, script }];
     } else if (Array.isArray(script)) {
         const times: Time[] = [];
@@ -106,7 +104,7 @@ async function executeScript(script: Script, parameters: string[]): Promise<Time
     } else if (script instanceof core.Service) {
         printInConsole(script.script);
         const now = Date.now();
-        execAsync(script.script, true, script.processKey);
+        execAsync(script.script, script.processKey);
         return [{ time: Date.now() - now, script: script.script }];
     } else if (script instanceof Function) {
         const now = Date.now();
@@ -134,14 +132,14 @@ async function executeScript(script: Script, parameters: string[]): Promise<Time
 }
 
 executeCommandLine().then(() => {
-    for (const subProcess of serviceProcesses) {
+    for (const subProcess of subProcesses) {
         subProcess.kill("SIGINT");
     }
     printInConsole("script success.");
     process.exit();
 }, error => {
     printInConsole(error);
-    for (const subProcess of serviceProcesses) {
+    for (const subProcess of subProcesses) {
         subProcess.kill("SIGINT");
     }
     process.exit(1);
