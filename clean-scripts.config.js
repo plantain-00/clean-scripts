@@ -1,4 +1,4 @@
-const { execAsync } = require('./dist/core')
+const { execAsync, Service } = require('./dist/core')
 
 const tsFiles = `"src/**/*.ts" "spec/**/*.ts"`
 const jsFiles = `"*.config.js"`
@@ -16,6 +16,8 @@ module.exports = {
   test: [
     `tsc -p spec`,
     `jasmine`,
+    `tsc -p demo`,
+    new Service('node demo/index.js'),
     async () => {
       const { stdout } = await execAsync('git status -s')
       if (stdout) {
