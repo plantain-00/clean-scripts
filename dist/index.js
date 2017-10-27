@@ -132,6 +132,7 @@ executeCommandLine().then(() => {
         subProcess.kill("SIGINT");
     }
     printInConsole("script success.");
+    process.exit();
 }, error => {
     printInConsole(error);
     for (const subProcess of serviceProcesses) {
