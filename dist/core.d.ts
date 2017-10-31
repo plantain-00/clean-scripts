@@ -21,3 +21,24 @@ import * as childProcess from "child_process";
  * @public
  */
 export declare const execAsync: typeof childProcess.exec.__promisify__;
+/**
+ * @public
+ */
+export declare type Script = string | ((context: {
+    [key: string]: any;
+}, parameters: string[]) => Promise<void>) | any[] | Set<any> | Service | {
+    [name: string]: any;
+};
+/**
+ * @public
+ */
+export declare type Time = {
+    time: number;
+    script: string;
+};
+/**
+ * @public
+ */
+export declare function executeScriptAsync(script: Script, parameters?: string[], context?: {
+    [key: string]: any;
+}, subProcesses?: childProcess.ChildProcess[]): Promise<Time[]>;

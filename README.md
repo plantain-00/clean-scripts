@@ -164,24 +164,30 @@ All services will be killed(send `SIGINT` actually) after all scripts end, or an
 ##### short-hand methods
 
 ```js
-const { sleep, readableStreamEnd, execAsync } = require('clean-scripts')
+const { sleep, readableStreamEnd, execAsync, executeScriptAsync } = require('clean-scripts')
 
 module.exports = {
   build: [
-    () => sleep(5000),
+    () => sleep(5000), // sleep milliseconds
     async () => {
         const readable = getReadableStreamSomehow()
         readable.on('data', chunk => {
             console.log(`Received ${chunk.length} bytes of data.`)
         })
-        await readableStreamEnd(readable)
+        await readableStreamEnd(readable) // wait readable stream ends
     },
     async () => {
-        const { stdout } = await execAsync('git status -s')
+        const { stdout } = await execAsync('git status -s') // promisified `childProcess.exec`
         if (stdout) {
             console.log(stdout)
             throw new Error(`generated files doesn't match.`)
         }
+    },
+    async () => {
+        await executeScriptAsync([ // support string script, array script, child script, nested script and so on
+            `rimraf dist/`,
+            `tsc -p src/`
+        ])
     }
   ]
 }
