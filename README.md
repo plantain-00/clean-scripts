@@ -164,7 +164,7 @@ All services will be killed(send `SIGINT` actually) after all scripts end, or an
 ##### short-hand methods
 
 ```js
-const { sleep, readableStreamEnd, execAsync, executeScriptAsync } = require('clean-scripts')
+const { sleep, readableStreamEnd, execAsync, executeScriptAsync, checkGitStatus } = require('clean-scripts')
 
 module.exports = {
   build: [
@@ -188,7 +188,8 @@ module.exports = {
             `rimraf dist/`,
             `tsc -p src/`
         ])
-    }
+    },
+    () => checkGitStatus() // check git status
   ]
 }
 ```

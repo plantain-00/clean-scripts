@@ -42,3 +42,7 @@ export declare type Time = {
 export declare function executeScriptAsync(script: Script, parameters?: string[], context?: {
     [key: string]: any;
 }, subProcesses?: childProcess.ChildProcess[]): Promise<Time[]>;
+/**
+ * @public
+ */
+export declare function checkGitStatus(): Promise<void>;

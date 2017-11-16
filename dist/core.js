@@ -126,3 +126,22 @@ async function executeScriptAsync(script, parameters = [], context = {}, subProc
     }
 }
 exports.executeScriptAsync = executeScriptAsync;
+/**
+ * @public
+ */
+async function checkGitStatus() {
+    const { stdout } = await exports.execAsync("git status -s");
+    if (stdout) {
+        printInConsole(stdout);
+        const files = stdout.split("\n").filter(s => s.length > 0).map(s => s.substring(3));
+        const fs = require("fs");
+        for (const file of files) {
+            if (fs.existsSync(file)) {
+                printInConsole(`${file}:`);
+                printInConsole(fs.readFileSync(file).toString());
+            }
+        }
+        throw new Error(`generated files doesn't match.`);
+    }
+}
+exports.checkGitStatus = checkGitStatus;
