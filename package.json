@@ -9,7 +9,6 @@
     "lint": "node dist/index.js lint",
     "test": "node dist/index.js test",
     "fix": "node dist/index.js fix",
-    "release": "node dist/index.js release",
     "lint:ts": "node dist/index.js lint.ts",
     "test[0]": "node dist/index.js test[0]"
   },
@@ -30,7 +29,6 @@
     "@types/minimist": "1.2.0",
     "@types/node": "8.0.53",
     "@types/pretty-ms": "3.0.0",
-    "clean-release": "1.4.0",
     "jasmine": "2.8.0",
     "no-unused-export": "1.4.3",
     "rimraf": "2.6.2",
