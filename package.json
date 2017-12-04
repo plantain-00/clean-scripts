@@ -23,11 +23,11 @@
   },
   "homepage": "https://github.com/plantain-00/clean-scripts#readme",
   "devDependencies": {
-    "@commitlint/cli": "5.0.1",
-    "@commitlint/config-angular": "5.0.1",
+    "@commitlint/cli": "5.2.0",
+    "@commitlint/config-angular": "5.1.1",
     "@types/jasmine": "2.8.2",
     "@types/minimist": "1.2.0",
-    "@types/node": "8.0.53",
+    "@types/node": "8.0.54",
     "@types/pretty-ms": "3.0.0",
     "jasmine": "2.8.0",
     "no-unused-export": "1.4.3",
@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "minimist": "1.2.0",
-    "pretty-ms": "3.0.1"
+    "pretty-ms": "3.1.0"
   },
   "bin": {
     "clean-scripts": "bin/clean-scripts"
