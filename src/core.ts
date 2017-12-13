@@ -46,11 +46,6 @@ export type Script = string | ((context: { [key: string]: any }, parameters: str
  */
 export type Time = { time: number, script: string };
 
-function printInConsole(message: any) {
-    // tslint:disable-next-line:no-console
-    console.log(message);
-}
-
 async function executeStringScriptAsync(script: string, context: { [key: string]: any }, subProcesses: childProcess.ChildProcess[], processKey?: string) {
     return new Promise<number>((resolve, reject) => {
         const now = Date.now();
@@ -75,7 +70,7 @@ async function executeStringScriptAsync(script: string, context: { [key: string]
  */
 export async function executeScriptAsync(script: Script, parameters: string[] = [], context: { [key: string]: any } = {}, subProcesses: childProcess.ChildProcess[] = []): Promise<Time[]> {
     if (typeof script === "string") {
-        printInConsole(script);
+        console.log(script);
         const time = await executeStringScriptAsync(script, context, subProcesses);
         return [{ time, script }];
     } else if (Array.isArray(script)) {
@@ -102,7 +97,7 @@ export async function executeScriptAsync(script: Script, parameters: string[] = 
         }
         return result;
     } else if (script instanceof Service) {
-        printInConsole(script.script);
+        console.log(script.script);
         const now = Date.now();
         executeStringScriptAsync(script.script, context, subProcesses, script.processKey);
         return [{ time: Date.now() - now, script: script.script }];
@@ -137,13 +132,13 @@ export async function executeScriptAsync(script: Script, parameters: string[] = 
 export async function checkGitStatus() {
     const { stdout } = await execAsync("git status -s");
     if (stdout) {
-        printInConsole(stdout);
+        console.log(stdout);
         const files = stdout.split("\n").filter(s => s.length > 0).map(s => s.substring(3));
         const fs = require("fs");
         for (const file of files) {
             if (fs.existsSync(file)) {
-                printInConsole(`${file}:`);
-                printInConsole(fs.readFileSync(file).toString());
+                console.log(`${file}:`);
+                console.log(fs.readFileSync(file).toString());
             }
         }
         throw new Error(`generated files doesn't match.`);

@@ -7,13 +7,8 @@ import * as packageJson from "../package.json";
 
 const defaultConfigName = "clean-scripts.config.js";
 
-function printInConsole(message: any) {
-    // tslint:disable-next-line:no-console
-    console.log(message);
-}
-
 function showToolVersion() {
-    printInConsole(`Version: ${packageJson.version}`);
+    console.log(`Version: ${packageJson.version}`);
 }
 
 const subProcesses: childProcess.ChildProcess[] = [];
@@ -43,22 +38,26 @@ async function executeCommandLine() {
     }
     const times = await executeScriptAsync(scriptValues, parameters, context, subProcesses);
     const totalTime = times.reduce((p, c) => p + c.time, 0);
-    printInConsole(`----------------total: ${prettyMs(totalTime)}----------------`);
+    console.log(`----------------total: ${prettyMs(totalTime)}----------------`);
     for (const { time, script } of times) {
         const pecent = Math.round(100.0 * time / totalTime);
-        printInConsole(`${prettyMs(time)} ${pecent}% ${script}`);
+        console.log(`${prettyMs(time)} ${pecent}% ${script}`);
     }
-    printInConsole(`----------------total: ${prettyMs(totalTime)}----------------`);
+    console.log(`----------------total: ${prettyMs(totalTime)}----------------`);
 }
 
 executeCommandLine().then(() => {
     for (const subProcess of subProcesses) {
         subProcess.kill("SIGINT");
     }
-    printInConsole("script success.");
+    console.log("script success.");
     process.exit();
 }, error => {
-    printInConsole(error);
+    if (error instanceof Error) {
+        console.log(error.message);
+    } else {
+        console.log(error);
+    }
     for (const subProcess of subProcesses) {
         subProcess.kill("SIGINT");
     }
