@@ -1,3 +1,5 @@
+# clean-scripts
+
 [![Dependency Status](https://david-dm.org/plantain-00/clean-scripts.svg)](https://david-dm.org/plantain-00/clean-scripts)
 [![devDependency Status](https://david-dm.org/plantain-00/clean-scripts/dev-status.svg)](https://david-dm.org/plantain-00/clean-scripts#info=devDependencies)
 [![Build Status: Linux](https://travis-ci.org/plantain-00/clean-scripts.svg?branch=master)](https://travis-ci.org/plantain-00/clean-scripts)
@@ -5,14 +7,13 @@
 [![npm version](https://badge.fury.io/js/clean-scripts.svg)](https://badge.fury.io/js/clean-scripts)
 [![Downloads](https://img.shields.io/npm/dm/clean-scripts.svg)](https://www.npmjs.com/package/clean-scripts)
 
-# clean-scripts
 A CLI tool to make scripts in package.json clean.
 
-#### install
+## install
 
 `npm i clean-scripts -g`
 
-#### usage
+## usage
 
 create config file(named `clean-scripts.config.js` or something else) like:
 
@@ -27,9 +28,9 @@ run `clean-scripts build`, or `clean-scripts lint`
 
 or `clean-scripts build --config clean-scripts.config.js`
 
-#### features
+## features
 
-##### string script
+### string script
 
 ```js
 module.exports = {
@@ -37,7 +38,7 @@ module.exports = {
 }
 ```
 
-##### array script
+### array script
 
 + executed one by one with order
 + used when later script depends on previous script's success
@@ -51,7 +52,7 @@ module.exports = {
 }
 ```
 
-##### `Set` or `Object` script
+### `Set` or `Object` script
 
 + executed collaterally without order
 + used when the scripts are irrelated
@@ -66,7 +67,7 @@ module.exports = {
 }
 ```
 
-##### nested script
+### nested script
 
 ```js
 module.exports = {
@@ -83,7 +84,7 @@ module.exports = {
 }
 ```
 
-##### custom function script
+### custom function script
 
 the type of the function should be `(context: { [key: string]: any }, parameters: string[]) => Promise<void>`
 
@@ -128,7 +129,7 @@ module.exports = {
 }
 ```
 
-##### child script
+### child script
 
 ```js
 module.exports = {
@@ -146,7 +147,7 @@ module.exports = {
 + run `clean-scripts build[0]` to run `rimraf dist/`
 + run `clean-scripts lint.ts` to run `tslint "src/**/*.ts"`
 
-##### start service
+### start service
 
 ```js
 const { Service } = require('clean-scripts')
@@ -161,7 +162,7 @@ module.exports = {
 
 All services will be killed(send `SIGINT` actually) after all scripts end, or any script errors.
 
-##### short-hand methods
+### short-hand methods
 
 ```js
 const { sleep, readableStreamEnd, execAsync, executeScriptAsync, checkGitStatus } = require('clean-scripts')
