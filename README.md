@@ -11,7 +11,7 @@ A CLI tool to make scripts in package.json clean.
 
 ## install
 
-`npm i clean-scripts -g`
+`yarn global add clean-scripts`
 
 ## usage
 
