@@ -12,10 +12,10 @@ exports.sleep = sleep;
  */
 function readableStreamEnd(readable) {
     return new Promise((resolve, reject) => {
-        readable.on("end", () => {
+        readable.on('end', () => {
             resolve();
         });
-        readable.on("error", error => {
+        readable.on('error', error => {
             reject(error);
         });
     });
@@ -40,7 +40,7 @@ exports.execAsync = util.promisify(childProcess.exec);
 async function executeStringScriptAsync(script, context, subProcesses, processKey) {
     return new Promise((resolve, reject) => {
         const now = Date.now();
-        const subProcess = childProcess.exec(script, { encoding: "utf8" }, (error, stdout, stderr) => {
+        const subProcess = childProcess.exec(script, { encoding: 'utf8' }, (error, stdout, stderr) => {
             if (error) {
                 reject(error);
             }
@@ -60,7 +60,7 @@ async function executeStringScriptAsync(script, context, subProcesses, processKe
  * @public
  */
 async function executeScriptAsync(script, parameters = [], context = {}, subProcesses = []) {
-    if (typeof script === "string") {
+    if (typeof script === 'string') {
         console.log(script);
         const time = await executeStringScriptAsync(script, context, subProcesses);
         return [{ time, script }];
@@ -99,7 +99,7 @@ async function executeScriptAsync(script, parameters = [], context = {}, subProc
     else if (script instanceof Function) {
         const now = Date.now();
         await script(context, parameters);
-        return [{ time: Date.now() - now, script: script.name || "custom function script" }];
+        return [{ time: Date.now() - now, script: script.name || 'custom function script' }];
     }
     else {
         const promises = [];
@@ -126,11 +126,11 @@ exports.executeScriptAsync = executeScriptAsync;
  * @public
  */
 async function checkGitStatus() {
-    const { stdout } = await exports.execAsync("git status -s");
+    const { stdout } = await exports.execAsync('git status -s');
     if (stdout) {
         console.log(stdout);
-        const files = stdout.split("\n").filter(s => s.length > 0).map(s => s.substring(3));
-        const fs = require("fs");
+        const files = stdout.split('\n').filter(s => s.length > 0).map(s => s.substring(3));
+        const fs = require('fs');
         for (const file of files) {
             if (fs.existsSync(file)) {
                 console.log(`${file}:`);

@@ -5,14 +5,14 @@ const path = require("path");
 const prettyMs = require("pretty-ms");
 const core_1 = require("./core");
 const packageJson = require("../package.json");
-const defaultConfigName = "clean-scripts.config.js";
+const defaultConfigName = 'clean-scripts.config.js';
 function showToolVersion() {
     console.log(`Version: ${packageJson.version}`);
 }
 const subProcesses = [];
 const context = {};
 async function executeCommandLine() {
-    const argv = minimist(process.argv.slice(2), { "--": true });
+    const argv = minimist(process.argv.slice(2), { '--': true });
     const showVersion = argv.v || argv.version;
     if (showVersion) {
         showToolVersion();
@@ -26,7 +26,7 @@ async function executeCommandLine() {
     const scriptName = scriptNames[0];
     const parameters = scriptNames.slice(1);
     // tslint:disable-next-line:no-eval
-    const scriptValues = scripts[scriptName] || eval("scripts." + scriptName);
+    const scriptValues = scripts[scriptName] || eval('scripts.' + scriptName);
     if (!scriptValues) {
         throw new Error(`Unknown script name: ${scriptName}`);
     }
@@ -41,9 +41,9 @@ async function executeCommandLine() {
 }
 executeCommandLine().then(() => {
     for (const subProcess of subProcesses) {
-        subProcess.kill("SIGINT");
+        subProcess.kill('SIGINT');
     }
-    console.log("script success.");
+    console.log('script success.');
     process.exit();
 }, error => {
     if (error instanceof Error) {
@@ -53,7 +53,7 @@ executeCommandLine().then(() => {
         console.log(error);
     }
     for (const subProcess of subProcesses) {
-        subProcess.kill("SIGINT");
+        subProcess.kill('SIGINT');
     }
     process.exit(1);
 });

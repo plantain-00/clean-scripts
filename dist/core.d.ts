@@ -3,7 +3,7 @@
  * @public
  */
 export declare function sleep(ms: number): Promise<{}>;
-import * as stream from "stream";
+import * as stream from 'stream';
 /**
  * @public
  */
@@ -16,7 +16,7 @@ export declare class Service {
     processKey: string | undefined;
     constructor(script: string, processKey?: string | undefined);
 }
-import * as childProcess from "child_process";
+import * as childProcess from 'child_process';
 /**
  * @public
  */
