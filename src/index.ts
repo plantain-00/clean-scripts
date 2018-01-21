@@ -31,7 +31,7 @@ async function executeCommandLine () {
   }
   const scriptName = scriptNames[0]
   const parameters = scriptNames.slice(1)
-    // tslint:disable-next-line:no-eval
+  // tslint:disable-next-line:no-eval
   const scriptValues = scripts[scriptName] || eval('scripts.' + scriptName)
   if (!scriptValues) {
     throw new Error(`Unknown script name: ${scriptName}`)
