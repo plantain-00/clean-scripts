@@ -1,7 +1,7 @@
-import * as minimist from 'minimist'
+import minimist from 'minimist'
 import * as childProcess from 'child_process'
 import * as path from 'path'
-import * as prettyMs from 'pretty-ms'
+import prettyMs from 'pretty-ms'
 import { Script, executeScriptAsync } from './core'
 import * as packageJson from '../package.json'
 

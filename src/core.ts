@@ -126,6 +126,8 @@ export async function executeScriptAsync (script: Script, parameters: string[] =
   }
 }
 
+import * as fs from 'fs'
+
 /**
  * @public
  */
@@ -134,7 +136,6 @@ export async function checkGitStatus () {
   if (stdout) {
     console.log(stdout)
     const files = stdout.split('\n').filter(s => s.length > 0).map(s => s.substring(3))
-    const fs = require('fs')
     for (const file of files) {
       if (fs.existsSync(file)) {
         console.log(`${file}:`)
