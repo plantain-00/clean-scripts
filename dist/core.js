@@ -1,12 +1,6 @@
 "use strict";
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-}
 Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = require("tslib");
 /**
  * @public
  */
@@ -38,8 +32,8 @@ class Service {
     }
 }
 exports.Service = Service;
-const childProcess = __importStar(require("child_process"));
-const util = __importStar(require("util"));
+const childProcess = tslib_1.__importStar(require("child_process"));
+const util = tslib_1.__importStar(require("util"));
 /**
  * @public
  */
@@ -129,7 +123,7 @@ async function executeScriptAsync(script, parameters = [], context = {}, subProc
     }
 }
 exports.executeScriptAsync = executeScriptAsync;
-const fs = __importStar(require("fs"));
+const fs = tslib_1.__importStar(require("fs"));
 /**
  * @public
  */
