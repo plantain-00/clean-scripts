@@ -39,7 +39,7 @@ export const execAsync = util.promisify(childProcess.exec)
 /**
  * @public
  */
-export type Script = string | ((context: { [key: string]: any }, parameters: string[]) => Promise<void>) | any[] | Set<any> | Service | { [name: string]: any }
+export type Script = string | ((context: { [key: string]: any }, parameters: string[]) => Promise<void>) | any[] | Set<any> | Service | { [name: string]: any } | null | undefined
 
 /**
  * @public
@@ -69,7 +69,9 @@ async function executeStringScriptAsync (script: string, context: { [key: string
  * @public
  */
 export async function executeScriptAsync (script: Script, parameters: string[] = [], context: { [key: string]: any } = {}, subProcesses: childProcess.ChildProcess[] = []): Promise<Time[]> {
-  if (typeof script === 'string') {
+  if (script === undefined || script === null) {
+    return []
+  } else if (typeof script === 'string') {
     console.log(script)
     const time = await executeStringScriptAsync(script, context, subProcesses)
     return [{ time, script }]

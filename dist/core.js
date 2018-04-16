@@ -61,7 +61,10 @@ async function executeStringScriptAsync(script, context, subProcesses, processKe
  * @public
  */
 async function executeScriptAsync(script, parameters = [], context = {}, subProcesses = []) {
-    if (typeof script === 'string') {
+    if (script === undefined || script === null) {
+        return [];
+    }
+    else if (typeof script === 'string') {
         console.log(script);
         const time = await executeStringScriptAsync(script, context, subProcesses);
         return [{ time, script }];

@@ -28,7 +28,7 @@ export declare type Script = string | ((context: {
     [key: string]: any;
 }, parameters: string[]) => Promise<void>) | any[] | Set<any> | Service | {
     [name: string]: any;
-};
+} | null | undefined;
 /**
  * @public
  */
