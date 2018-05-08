@@ -60,6 +60,7 @@ async function executeStringScriptAsync(script, context, subProcesses, processKe
 /**
  * @public
  */
+// tslint:disable-next-line:cognitive-complexity
 async function executeScriptAsync(script, parameters = [], context = {}, subProcesses = []) {
     if (script === undefined || script === null) {
         return [];

@@ -1,7 +1,7 @@
 /**
  * @public
  */
-export function sleep (ms: number) {
+export function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
@@ -10,7 +10,7 @@ import * as stream from 'stream'
 /**
  * @public
  */
-export function readableStreamEnd (readable: stream.Readable) {
+export function readableStreamEnd(readable: stream.Readable) {
   return new Promise<void>((resolve, reject) => {
     readable.on('end', () => {
       resolve()
@@ -25,7 +25,7 @@ export function readableStreamEnd (readable: stream.Readable) {
  * @public
  */
 export class Service {
-  constructor (public script: string, public processKey?: string) { }
+  constructor(public script: string, public processKey?: string) { }
 }
 
 import * as childProcess from 'child_process'
@@ -46,7 +46,7 @@ export type Script = string | ((context: { [key: string]: any }, parameters: str
  */
 export type Time = { time: number, script: string }
 
-async function executeStringScriptAsync (script: string, context: { [key: string]: any }, subProcesses: childProcess.ChildProcess[], processKey?: string) {
+async function executeStringScriptAsync(script: string, context: { [key: string]: any }, subProcesses: childProcess.ChildProcess[], processKey?: string) {
   return new Promise<number>((resolve, reject) => {
     const now = Date.now()
     const subProcess = childProcess.exec(script, { encoding: 'utf8' }, (error, stdout, stderr) => {
@@ -68,7 +68,8 @@ async function executeStringScriptAsync (script: string, context: { [key: string
 /**
  * @public
  */
-export async function executeScriptAsync (script: Script, parameters: string[] = [], context: { [key: string]: any } = {}, subProcesses: childProcess.ChildProcess[] = []): Promise<Time[]> {
+// tslint:disable-next-line:cognitive-complexity
+export async function executeScriptAsync(script: Script, parameters: string[] = [], context: { [key: string]: any } = {}, subProcesses: childProcess.ChildProcess[] = []): Promise<Time[]> {
   if (script === undefined || script === null) {
     return []
   } else if (typeof script === 'string') {
@@ -133,7 +134,7 @@ import * as fs from 'fs'
 /**
  * @public
  */
-export async function checkGitStatus () {
+export async function checkGitStatus() {
   const { stdout } = await execAsync('git status -s')
   if (stdout) {
     console.log(stdout)

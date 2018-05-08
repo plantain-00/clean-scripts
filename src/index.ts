@@ -7,14 +7,14 @@ import * as packageJson from '../package.json'
 
 const defaultConfigName = 'clean-scripts.config.js'
 
-function showToolVersion () {
+function showToolVersion() {
   console.log(`Version: ${packageJson.version}`)
 }
 
 const subProcesses: childProcess.ChildProcess[] = []
 const context: { [key: string]: any } = {}
 
-async function executeCommandLine () {
+async function executeCommandLine() {
   const argv = minimist(process.argv.slice(2), { '--': true })
 
   const showVersion = argv.v || argv.version
