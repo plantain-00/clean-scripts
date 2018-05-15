@@ -162,6 +162,20 @@ module.exports = {
 
 All services will be killed(send `SIGINT` actually) after all scripts end, or any script errors.
 
+### start program
+
+```js
+const { Program } = require('clean-scripts')
+
+module.exports = {
+  build: [
+    new Program('http-server -p 8000', 10000) // the program will last at most 10 seconds, can be used to test the start process of a program
+  ]
+}
+```
+
+All programs will be killed(send `SIGINT` actually) after all scripts end, or any script errors.
+
 ### short-hand methods
 
 ```js

@@ -28,6 +28,13 @@ export class Service {
   constructor(public script: string, public processKey?: string) { }
 }
 
+/**
+ * @public
+ */
+export class Program {
+  constructor(public script: string, public timeout: number, public processKey?: string) { }
+}
+
 import * as childProcess from 'child_process'
 import * as util from 'util'
 
@@ -46,7 +53,7 @@ export type Script = string | ((context: { [key: string]: any }, parameters: str
  */
 export type Time = { time: number, script: string }
 
-async function executeStringScriptAsync(script: string, context: { [key: string]: any }, subProcesses: childProcess.ChildProcess[], processKey?: string) {
+async function executeStringScriptAsync(script: string, context: { [key: string]: any }, subProcesses: childProcess.ChildProcess[], processKey?: string, timeout?: number) {
   return new Promise<number>((resolve, reject) => {
     const now = Date.now()
     const subProcess = childProcess.exec(script, { encoding: 'utf8' }, (error, stdout, stderr) => {
@@ -62,6 +69,12 @@ async function executeStringScriptAsync(script: string, context: { [key: string]
       context[processKey] = subProcess
     }
     subProcesses.push(subProcess)
+
+    if (timeout) {
+      setTimeout(() => {
+        resolve(Date.now() - now)
+      }, timeout)
+    }
   })
 }
 
@@ -104,6 +117,10 @@ export async function executeScriptAsync(script: Script, parameters: string[] = 
     const now = Date.now()
     executeStringScriptAsync(script.script, context, subProcesses, script.processKey)
     return [{ time: Date.now() - now, script: script.script }]
+  } else if (script instanceof Program) {
+    console.log(script.script)
+    const time = await executeStringScriptAsync(script.script, context, subProcesses, script.processKey, script.timeout)
+    return [{ time, script: script.script }]
   } else if (script instanceof Function) {
     const now = Date.now()
     await script(context, parameters)

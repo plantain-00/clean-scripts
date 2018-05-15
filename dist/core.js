@@ -32,13 +32,24 @@ class Service {
     }
 }
 exports.Service = Service;
+/**
+ * @public
+ */
+class Program {
+    constructor(script, timeout, processKey) {
+        this.script = script;
+        this.timeout = timeout;
+        this.processKey = processKey;
+    }
+}
+exports.Program = Program;
 const childProcess = tslib_1.__importStar(require("child_process"));
 const util = tslib_1.__importStar(require("util"));
 /**
  * @public
  */
 exports.execAsync = util.promisify(childProcess.exec);
-async function executeStringScriptAsync(script, context, subProcesses, processKey) {
+async function executeStringScriptAsync(script, context, subProcesses, processKey, timeout) {
     return new Promise((resolve, reject) => {
         const now = Date.now();
         const subProcess = childProcess.exec(script, { encoding: 'utf8' }, (error, stdout, stderr) => {
@@ -55,6 +66,11 @@ async function executeStringScriptAsync(script, context, subProcesses, processKe
             context[processKey] = subProcess;
         }
         subProcesses.push(subProcess);
+        if (timeout) {
+            setTimeout(() => {
+                resolve(Date.now() - now);
+            }, timeout);
+        }
     });
 }
 /**
@@ -100,6 +116,11 @@ async function executeScriptAsync(script, parameters = [], context = {}, subProc
         const now = Date.now();
         executeStringScriptAsync(script.script, context, subProcesses, script.processKey);
         return [{ time: Date.now() - now, script: script.script }];
+    }
+    else if (script instanceof Program) {
+        console.log(script.script);
+        const time = await executeStringScriptAsync(script.script, context, subProcesses, script.processKey, script.timeout);
+        return [{ time, script: script.script }];
     }
     else if (script instanceof Function) {
         const now = Date.now();

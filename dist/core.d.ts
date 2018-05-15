@@ -16,6 +16,15 @@ export declare class Service {
     processKey: string | undefined;
     constructor(script: string, processKey?: string | undefined);
 }
+/**
+ * @public
+ */
+export declare class Program {
+    script: string;
+    timeout: number;
+    processKey: string | undefined;
+    constructor(script: string, timeout: number, processKey?: string | undefined);
+}
 import * as childProcess from 'child_process';
 /**
  * @public
