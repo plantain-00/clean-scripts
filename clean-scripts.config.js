@@ -20,6 +20,7 @@ module.exports = {
     `jasmine`,
     `tsc -p demo`,
     new Service('node demo/index.js'),
+    'clean-release --config clean-run.config.js',
     () => checkGitStatus()
   ],
   fix: {
