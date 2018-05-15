@@ -9,6 +9,6 @@ module.exports = {
   ],
   postScript: [
     'cd "[dir]" && yarn --production',
-    '[dir]/bin/clean-scripts build'
+    'node [dir]/dist/index.js build'
   ]
 }
