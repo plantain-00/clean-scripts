@@ -47,12 +47,6 @@ async function executeCommandLine() {
 }
 
 function cleanup() {
-  for (const subProcess of subProcesses) {
-    subProcess.kill('SIGINT')
-    if (process.platform === 'win32') {
-      childProcess.execSync(`taskkill -F -T -PID ${subProcess.pid}`)
-    }
-  }
   if (process.platform === 'darwin' || process.platform === 'linux') {
     const stdout = childProcess.execSync('ps -l').toString()
     const ps = stdout.split('\n')
@@ -63,6 +57,12 @@ function cleanup() {
     collectPids(process.pid, ps, result)
     for (const pid of result) {
       childProcess.execSync(`kill -9 ${pid}`)
+    }
+  }
+  for (const subProcess of subProcesses) {
+    subProcess.kill('SIGINT')
+    if (process.platform === 'win32') {
+      childProcess.execSync(`taskkill -F -T -PID ${subProcess.pid}`)
     }
   }
 }
