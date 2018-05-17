@@ -46,10 +46,29 @@ async function executeCommandLine() {
   console.log(`----------------total: ${prettyMs(totalTime)}----------------`)
 }
 
-executeCommandLine().then(() => {
+function cleanup() {
   for (const subProcess of subProcesses) {
     subProcess.kill('SIGINT')
+    if (process.platform === 'win32') {
+      childProcess.execSync(`taskkill -F -T -PID ${subProcess.pid}`)
+    }
   }
+  if (process.platform === 'darwin' || process.platform === 'linux') {
+    const stdout = childProcess.execSync('ps -l').toString()
+    const ps = stdout.split('\n')
+      .map(s => s.split(' ').filter(s => s))
+      .filter((s, i) => i > 0 && s.length >= 2)
+      .map(s => ({ pid: +s[1], ppid: +s[2] }))
+    const result: number[] = []
+    collectPids(process.pid, ps, result)
+    for (const pid of result) {
+      childProcess.execSync(`kill -9 ${pid}`)
+    }
+  }
+}
+
+executeCommandLine().then(() => {
+  cleanup()
   console.log('script success.')
   process.exit()
 }, error => {
@@ -58,8 +77,19 @@ executeCommandLine().then(() => {
   } else {
     console.log(error)
   }
-  for (const subProcess of subProcesses) {
-    subProcess.kill('SIGINT')
-  }
+  cleanup()
   process.exit(1)
 })
+
+interface Ps {
+  pid: number
+  ppid: number
+}
+
+function collectPids(pid: number, ps: Ps[], result: number[]) {
+  const children = ps.filter(p => p.ppid === pid)
+  for (const child of children) {
+    result.push(child.pid)
+    collectPids(child.pid, ps, result)
+  }
+}
