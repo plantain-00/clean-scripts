@@ -60,9 +60,6 @@ function cleanup() {
     }
   }
   for (const subProcess of subProcesses) {
-    if (process.platform === 'win32') {
-      childProcess.execSync(`taskkill -F -T -PID ${subProcess.pid}`)
-    }
     subProcess.kill('SIGINT')
   }
 }
