@@ -13,7 +13,7 @@ export declare function readableStreamEnd(readable: stream.Readable): Promise<vo
  */
 export declare class Service {
     script: string;
-    processKey: string | undefined;
+    processKey?: string | undefined;
     constructor(script: string, processKey?: string | undefined);
 }
 /**
@@ -22,7 +22,7 @@ export declare class Service {
 export declare class Program {
     script: string;
     timeout: number;
-    processKey: string | undefined;
+    processKey?: string | undefined;
     constructor(script: string, timeout: number, processKey?: string | undefined);
 }
 import * as childProcess from 'child_process';

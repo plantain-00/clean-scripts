@@ -23,6 +23,7 @@ async function executeCommandLine() {
     return
   }
 
+  // tslint:disable-next-line:max-union-size
   const scripts: { [name: string]: Script | Script[] | Set<Script> | { [name: string]: Script } } = require(path.resolve(process.cwd(), argv.config || defaultConfigName))
 
   const scriptNames = argv._

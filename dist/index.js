@@ -20,6 +20,7 @@ async function executeCommandLine() {
         showToolVersion();
         return;
     }
+    // tslint:disable-next-line:max-union-size
     const scripts = require(path.resolve(process.cwd(), argv.config || defaultConfigName));
     const scriptNames = argv._;
     if (!scriptNames || scriptNames.length === 0) {
