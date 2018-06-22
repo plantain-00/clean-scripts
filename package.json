@@ -27,7 +27,7 @@
     "@commitlint/config-conventional": "7.0.1",
     "@types/jasmine": "2.8.8",
     "@types/minimist": "1.2.0",
-    "@types/node": "10.3.3",
+    "@types/node": "10.3.4",
     "@types/pretty-ms": "3.0.0",
     "clean-release": "2.6.0",
     "jasmine": "3.1.0",
@@ -36,14 +36,14 @@
     "rimraf": "2.6.2",
     "standard": "11.0.1",
     "tslint": "5.10.0",
-    "tslint-config-standard": "7.0.0",
+    "tslint-config-standard": "7.1.0",
     "tslint-sonarts": "1.7.0",
     "typescript": "2.9.2"
   },
   "dependencies": {
     "minimist": "1.2.0",
     "pretty-ms": "3.2.0",
-    "tslib": "1.9.2"
+    "tslib": "1.9.3"
   },
   "bin": {
     "clean-scripts": "bin/clean-scripts"
