@@ -63,8 +63,12 @@ async function executeStringScriptAsync(script: string, context: { [key: string]
         resolve(Date.now() - now)
       }
     })
-    subProcess.stdout.pipe(process.stdout)
-    subProcess.stderr.pipe(process.stderr)
+    if (subProcess.stdout) {
+      subProcess.stdout.pipe(process.stdout)
+    }
+    if (subProcess.stderr) {
+      subProcess.stderr.pipe(process.stderr)
+    }
     if (processKey) {
       context[processKey] = subProcess
     }
