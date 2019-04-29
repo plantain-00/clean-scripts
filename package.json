@@ -22,7 +22,7 @@
     "url": "https://github.com/plantain-00/clean-scripts/issues"
   },
   "typeCoverage": {
-    "atLeast": 96
+    "atLeast": 97
   },
   "homepage": "https://github.com/plantain-00/clean-scripts#readme",
   "devDependencies": {

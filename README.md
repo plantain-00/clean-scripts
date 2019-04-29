@@ -177,6 +177,50 @@ module.exports = {
 
 All programs will be killed(send `SIGINT` actually) after all scripts end, or any script errors.
 
+### tasks
+
+```js
+const { Tasks } = require('clean-scripts')
+
+module.exports = {
+    build: new Tasks([
+      {
+        name: 'build a',
+        script: 'yarn workspace a run build'
+      },
+      {
+        name: 'test a',
+        script: 'yarn workspace a run test',
+        dependencies: [
+          'build a'
+        ]
+      },
+      {
+        name: 'build b',
+        script: 'yarn workspace b run build',
+        dependencies: [
+          'build a'
+        ]
+      },
+      {
+        name: 'test b',
+        script: 'yarn workspace b run test',
+        dependencies: [
+          'build b'
+        ]
+      }
+    ])
+}
+```
+
+the 4 tasks will be execuated in following order:
+
+1. `build a`
+2. `build b` and `test a`
+3. `test b` as soon as `build b` completed
+
+This can be very useful and effective for complex or dynamic tasks.
+
 ### short-hand methods
 
 ```js
