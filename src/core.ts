@@ -35,6 +35,22 @@ export class Program {
   constructor(public script: string, public timeout: number, public processKey?: string) { }
 }
 
+/**
+ * @public
+ */
+export class Tasks {
+  constructor(public tasks: Task[]) { }
+}
+
+/**
+ * @public
+ */
+export interface Task {
+  name: string
+  script: Script
+  dependencies?: string[]
+}
+
 import * as childProcess from 'child_process'
 import * as util from 'util'
 
@@ -46,7 +62,7 @@ export const execAsync = util.promisify(childProcess.exec)
 /**
  * @public
  */
-export type Script = string | ((context: { [key: string]: any }, parameters: string[]) => Promise<void>) | any[] | Set<any> | Service | { [name: string]: any } | null | undefined
+export type Script = string | ((context: { [key: string]: any }, parameters: string[]) => Promise<void>) | any[] | Set<any> | Service | Program | Tasks | { [name: string]: any } | null | undefined
 
 /**
  * @public
@@ -129,6 +145,28 @@ export async function executeScriptAsync(script: Script, parameters: string[] = 
     const now = Date.now()
     await script(context, parameters)
     return [{ time: Date.now() - now, script: script.name || 'custom function script' }]
+  } else if (script instanceof Tasks) {
+    const now = Date.now()
+    let remainTasks = script.tasks
+    let currentTasks: Task[] = []
+    const execuateTasks = async() => {
+      let tasks = getTasks(remainTasks, currentTasks)
+      currentTasks.push(...tasks.current)
+      if (tasks.current.length > 0) {
+        remainTasks = tasks.remain
+        await Promise.all(tasks.current
+          .map((c) => executeScriptAsync(c.script, parameters, context, subProcesses)
+            .then(() => {
+              currentTasks = currentTasks.filter((r) => r !== c)
+              return execuateTasks()
+            })))
+      }
+    }
+    await execuateTasks()
+    if (remainTasks.length > 0) {
+      console.warn(`remain ${remainTasks.length} tasks: ${remainTasks.map((r) => r.name).join(', ')}`)
+    }
+    return [{ time: Date.now() - now, script: 'custom tasks' }]
   } else {
     const promises: Promise<Time[]>[] = []
     for (const key in script) {
@@ -148,6 +186,21 @@ export async function executeScriptAsync(script: Script, parameters: string[] = 
     }
     return result
   }
+}
+
+function getTasks(remainTasks: Task[], currentTasks: Task[]) {
+  const current: Task[] = []
+  const remain: Task[] = []
+  for (const task of remainTasks) {
+    if (task.dependencies
+      && task.dependencies.length > 0
+      && task.dependencies.some((d) => remainTasks.some((t) => t.name === d) || currentTasks.some((t) => t.name === d))) {
+      remain.push(task)
+    } else {
+      current.push(task)
+    }
+  }
+  return { current, remain }
 }
 
 import * as fs from 'fs'

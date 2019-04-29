@@ -25,6 +25,21 @@ export declare class Program {
     processKey?: string | undefined;
     constructor(script: string, timeout: number, processKey?: string | undefined);
 }
+/**
+ * @public
+ */
+export declare class Tasks {
+    tasks: Task[];
+    constructor(tasks: Task[]);
+}
+/**
+ * @public
+ */
+export interface Task {
+    name: string;
+    script: Script;
+    dependencies?: string[];
+}
 import * as childProcess from 'child_process';
 /**
  * @public
@@ -35,7 +50,7 @@ export declare const execAsync: typeof childProcess.exec.__promisify__;
  */
 export declare type Script = string | ((context: {
     [key: string]: any;
-}, parameters: string[]) => Promise<void>) | any[] | Set<any> | Service | {
+}, parameters: string[]) => Promise<void>) | any[] | Set<any> | Service | Program | Tasks | {
     [name: string]: any;
 } | null | undefined;
 /**
