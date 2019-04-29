@@ -146,27 +146,28 @@ export async function executeScriptAsync(script: Script, parameters: string[] = 
     await script(context, parameters)
     return [{ time: Date.now() - now, script: script.name || 'custom function script' }]
   } else if (script instanceof Tasks) {
-    const now = Date.now()
     let remainTasks = script.tasks
     let currentTasks: Task[] = []
-    const execuateTasks = async() => {
+    const execuateTasks = async(): Promise<Time[]> => {
       let tasks = getTasks(remainTasks, currentTasks)
       currentTasks.push(...tasks.current)
       if (tasks.current.length > 0) {
         remainTasks = tasks.remain
-        await Promise.all(tasks.current
-          .map((c) => executeScriptAsync(c.script, parameters, context, subProcesses)
-            .then(() => {
-              currentTasks = currentTasks.filter((r) => r !== c)
-              return execuateTasks()
-            })))
+        const times = await Promise.all(tasks.current.map(async(c) => {
+          const time = await executeScriptAsync(c.script, parameters, context, subProcesses)
+          currentTasks = currentTasks.filter((r) => r !== c)
+          const newTimes = await execuateTasks()
+          return [...time, ...newTimes]
+        }))
+        return getLongestTime(times)
       }
+      return []
     }
-    await execuateTasks()
+    const times = await execuateTasks()
     if (remainTasks.length > 0) {
       console.warn(`remain ${remainTasks.length} tasks: ${remainTasks.map((r) => r.name).join(', ')}`)
     }
-    return [{ time: Date.now() - now, script: 'custom tasks' }]
+    return times
   } else {
     const promises: Promise<Time[]>[] = []
     for (const key in script) {
@@ -175,17 +176,21 @@ export async function executeScriptAsync(script: Script, parameters: string[] = 
       }
     }
     const times = await Promise.all(promises)
-    let result: Time[] = []
-    let maxTotalTime = 0
-    for (const time of times) {
-      const totalTime = time.reduce((p, c) => p + c.time, 0)
-      if (totalTime > maxTotalTime) {
-        result = time
-        maxTotalTime = totalTime
-      }
-    }
-    return result
+    return getLongestTime(times)
   }
+}
+
+function getLongestTime(times: Time[][]) {
+  let result: Time[] = []
+  let maxTotalTime = 0
+  for (const time of times) {
+    const totalTime = time.reduce((p, c) => p + c.time, 0)
+    if (totalTime > maxTotalTime) {
+      result = time
+      maxTotalTime = totalTime
+    }
+  }
+  return result
 }
 
 function getTasks(remainTasks: Task[], currentTasks: Task[]) {
