@@ -30,7 +30,8 @@ export declare class Program {
  */
 export declare class Tasks {
     tasks: Task[];
-    constructor(tasks: Task[]);
+    maxWorkerCount: number;
+    constructor(tasks: Task[], maxWorkerCount?: number);
 }
 /**
  * @public

@@ -47,8 +47,9 @@ exports.Program = Program;
  * @public
  */
 class Tasks {
-    constructor(tasks) {
+    constructor(tasks, maxWorkerCount = Infinity) {
         this.tasks = tasks;
+        this.maxWorkerCount = maxWorkerCount;
     }
 }
 exports.Tasks = Tasks;
@@ -144,7 +145,7 @@ async function executeScriptAsync(script, parameters = [], context = {}, subProc
         let remainTasks = script.tasks;
         let currentTasks = [];
         const execuateTasks = async () => {
-            let tasks = getTasks(remainTasks, currentTasks);
+            let tasks = getTasks(remainTasks, currentTasks, script.maxWorkerCount);
             currentTasks.push(...tasks.current);
             if (tasks.current.length > 0) {
                 remainTasks = tasks.remain;
@@ -188,13 +189,15 @@ function getLongestTime(times) {
     }
     return result;
 }
-function getTasks(remainTasks, currentTasks) {
+function getTasks(remainTasks, currentTasks, maxWorkerCount) {
     const current = [];
     const remain = [];
     for (const task of remainTasks) {
-        if (task.dependencies
-            && task.dependencies.length > 0
-            && task.dependencies.some((d) => remainTasks.some((t) => t.name === d) || currentTasks.some((t) => t.name === d))) {
+        if (current.length >= maxWorkerCount
+            || (task.dependencies
+                && task.dependencies.length > 0
+                && task.dependencies.some((d) => remainTasks.some((t) => t.name === d)
+                    || currentTasks.some((t) => t.name === d)))) {
             remain.push(task);
         }
         else {

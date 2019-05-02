@@ -39,7 +39,7 @@ export class Program {
  * @public
  */
 export class Tasks {
-  constructor(public tasks: Task[]) { }
+  constructor(public tasks: Task[], public maxWorkerCount = Infinity) { }
 }
 
 /**
@@ -149,7 +149,7 @@ export async function executeScriptAsync(script: Script, parameters: string[] = 
     let remainTasks = script.tasks
     let currentTasks: Task[] = []
     const execuateTasks = async(): Promise<Time[]> => {
-      let tasks = getTasks(remainTasks, currentTasks)
+      let tasks = getTasks(remainTasks, currentTasks, script.maxWorkerCount)
       currentTasks.push(...tasks.current)
       if (tasks.current.length > 0) {
         remainTasks = tasks.remain
@@ -193,13 +193,16 @@ function getLongestTime(times: Time[][]) {
   return result
 }
 
-function getTasks(remainTasks: Task[], currentTasks: Task[]) {
+function getTasks(remainTasks: Task[], currentTasks: Task[], maxWorkerCount: number) {
   const current: Task[] = []
   const remain: Task[] = []
   for (const task of remainTasks) {
-    if (task.dependencies
-      && task.dependencies.length > 0
-      && task.dependencies.some((d) => remainTasks.some((t) => t.name === d) || currentTasks.some((t) => t.name === d))) {
+    if (current.length >= maxWorkerCount
+      || (task.dependencies
+        && task.dependencies.length > 0
+        && task.dependencies.some(
+          (d) => remainTasks.some((t) => t.name === d)
+            || currentTasks.some((t) => t.name === d)))) {
       remain.push(task)
     } else {
       current.push(task)
