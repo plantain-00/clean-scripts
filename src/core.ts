@@ -165,7 +165,7 @@ export async function executeScriptAsync(script: Script, parameters: string[] = 
     }
     const times = await execuateTasks()
     if (remainTasks.length > 0) {
-      console.warn(`remain ${remainTasks.length} tasks: ${remainTasks.map((r) => r.name).join(', ')}`)
+      throw new Error(`remain ${remainTasks.length} tasks: ${remainTasks.map((r) => r.name).join(', ')}`)
     }
     return times
   } else {
