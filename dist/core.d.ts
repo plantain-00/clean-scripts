@@ -2,7 +2,7 @@
 /**
  * @public
  */
-export declare function sleep(ms: number): Promise<{}>;
+export declare function sleep(ms: number): Promise<unknown>;
 import * as stream from 'stream';
 /**
  * @public
