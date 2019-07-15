@@ -156,12 +156,15 @@ const { Service } = require('clean-scripts')
 module.exports = {
   build: [
     new Service('http-server -p 8000'),
-    new Service('http-server', 'server2') // the child process can be accessed by `context.server2` later
+    new Service('http-server', 'server2'), // the child process can be accessed by `context.server2` later
+    new Service('http-server -p 8000', { maximumCpu: 50, maximumMemory: 1175552 }), // if the cpu usage of this service > maximumCpu, throw an error. same to the memory usage
   ]
 }
 ```
 
 All services will be killed(send `SIGINT` actually) after all scripts end, or any script errors.
+
+The cpu and memory check runs every 1 second.
 
 ### start program
 
@@ -170,12 +173,15 @@ const { Program } = require('clean-scripts')
 
 module.exports = {
   build: [
-    new Program('http-server -p 8000', 10000) // the program will last at most 10 seconds, can be used to test the start process of a program
+    new Program('http-server -p 8000', 10000), // the program will last at most 10 seconds, can be used to test the start process of a program
+    new Program('http-server -p 8000', 10000, { maximumCpu: 50, maximumMemory: 1175552 }), // if the cpu usage of this program > maximumCpu, throw an error. same to the memory usage
   ]
 }
 ```
 
 All programs will be killed(send `SIGINT` actually) after all scripts end, or any script errors.
+
+The cpu and memory check runs every 1 second.
 
 ### tasks
 

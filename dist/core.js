@@ -26,9 +26,9 @@ exports.readableStreamEnd = readableStreamEnd;
  * @public
  */
 class Service {
-    constructor(script, processKey) {
+    constructor(script, options) {
         this.script = script;
-        this.processKey = processKey;
+        this.options = options;
     }
 }
 exports.Service = Service;
@@ -36,10 +36,10 @@ exports.Service = Service;
  * @public
  */
 class Program {
-    constructor(script, timeout, processKey) {
+    constructor(script, timeout, options) {
         this.script = script;
         this.timeout = timeout;
-        this.processKey = processKey;
+        this.options = options;
     }
 }
 exports.Program = Program;
@@ -59,10 +59,19 @@ const util = tslib_1.__importStar(require("util"));
  * @public
  */
 exports.execAsync = util.promisify(childProcess.exec);
-async function executeStringScriptAsync(script, context, subProcesses, processKey, timeout) {
+const pidusage_1 = tslib_1.__importDefault(require("pidusage"));
+// tslint:disable-next-line:cognitive-complexity
+async function executeStringScriptAsync(script, context, subProcesses, options) {
     return new Promise((resolve, reject) => {
         const now = Date.now();
-        const subProcess = childProcess.exec(script, { encoding: 'utf8' }, (error, stdout, stderr) => {
+        let timer;
+        const cleanTimer = () => {
+            if (timer) {
+                clearInterval(timer);
+            }
+        };
+        const subProcess = childProcess.exec(script, { encoding: 'utf8' }, (error) => {
+            cleanTimer();
             if (error) {
                 reject(error);
             }
@@ -76,16 +85,55 @@ async function executeStringScriptAsync(script, context, subProcesses, processKe
         if (subProcess.stderr) {
             subProcess.stderr.pipe(process.stderr);
         }
-        if (processKey) {
-            context[processKey] = subProcess;
-        }
         subProcesses.push(subProcess);
-        if (timeout) {
-            setTimeout(() => {
-                resolve(Date.now() - now);
-            }, timeout);
+        if (options) {
+            if (options.processKey) {
+                context[options.processKey] = subProcess;
+            }
+            if (options.maximumCpu || options.maximumMemory) {
+                timer = setInterval(() => {
+                    pidusage_1.default(subProcess.pid, (error, stats) => {
+                        if (error) {
+                            cleanTimer();
+                            reject(error);
+                        }
+                        else {
+                            if (options.maximumCpu) {
+                                if (stats.cpu > options.maximumCpu) {
+                                    cleanTimer();
+                                    reject(new Error(`cpu ${stats.cpu} should <= ${options.maximumCpu}`));
+                                }
+                            }
+                            else if (options.maximumMemory) {
+                                // tslint:disable-next-line:no-collapsible-if
+                                if (stats.memory > options.maximumMemory) {
+                                    cleanTimer();
+                                    reject(new Error(`memory ${stats.memory} should <= ${options.maximumMemory}`));
+                                }
+                            }
+                        }
+                    });
+                }, 1000);
+            }
+            if (options.timeout) {
+                setTimeout(() => {
+                    cleanTimer();
+                    resolve(Date.now() - now);
+                }, options.timeout);
+            }
         }
     });
+}
+function getOptions(options) {
+    if (typeof options === 'string') {
+        return {
+            processKey: options
+        };
+    }
+    if (options) {
+        return options;
+    }
+    return undefined;
 }
 /**
  * @public
@@ -128,12 +176,15 @@ async function executeScriptAsync(script, parameters = [], context = {}, subProc
     else if (script instanceof Service) {
         console.log(script.script);
         const now = Date.now();
-        executeStringScriptAsync(script.script, context, subProcesses, script.processKey);
+        executeStringScriptAsync(script.script, context, subProcesses, getOptions(script.options));
         return [{ time: Date.now() - now, script: script.script }];
     }
     else if (script instanceof Program) {
         console.log(script.script);
-        const time = await executeStringScriptAsync(script.script, context, subProcesses, script.processKey, script.timeout);
+        const time = await executeStringScriptAsync(script.script, context, subProcesses, {
+            timeout: script.timeout,
+            ...getOptions(script.options)
+        });
         return [{ time, script: script.script }];
     }
     else if (script instanceof Function) {

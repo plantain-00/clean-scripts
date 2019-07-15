@@ -25,14 +25,29 @@ export function readableStreamEnd(readable: stream.Readable) {
  * @public
  */
 export class Service {
-  constructor(public script: string, public processKey?: string) { }
+  constructor(public script: string, public options?: string | Options) { }
+}
+
+/**
+ * @public
+ */
+export interface Options {
+  processKey?: string
+  /**
+   * percent
+   */
+  maximumCpu?: number
+  /**
+   * bytes
+   */
+  maximumMemory?: number
 }
 
 /**
  * @public
  */
 export class Program {
-  constructor(public script: string, public timeout: number, public processKey?: string) { }
+  constructor(public script: string, public timeout: number, public options?: string | Options) { }
 }
 
 /**
@@ -69,10 +84,25 @@ export type Script = string | ((context: { [key: string]: any }, parameters: str
  */
 export type Time = { time: number, script: string }
 
-async function executeStringScriptAsync(script: string, context: { [key: string]: any }, subProcesses: childProcess.ChildProcess[], processKey?: string, timeout?: number) {
+import pidusage from 'pidusage'
+
+// tslint:disable-next-line:cognitive-complexity
+async function executeStringScriptAsync(
+  script: string,
+  context: { [key: string]: any },
+  subProcesses: childProcess.ChildProcess[],
+  options?: { timeout?: number } & Options
+) {
   return new Promise<number>((resolve, reject) => {
     const now = Date.now()
-    const subProcess = childProcess.exec(script, { encoding: 'utf8' }, (error, stdout, stderr) => {
+    let timer: NodeJS.Timeout | undefined
+    const cleanTimer = () => {
+      if (timer) {
+        clearInterval(timer)
+      }
+    }
+    const subProcess = childProcess.exec(script, { encoding: 'utf8' }, (error) => {
+      cleanTimer()
       if (error) {
         reject(error)
       } else {
@@ -85,17 +115,54 @@ async function executeStringScriptAsync(script: string, context: { [key: string]
     if (subProcess.stderr) {
       subProcess.stderr.pipe(process.stderr)
     }
-    if (processKey) {
-      context[processKey] = subProcess
-    }
     subProcesses.push(subProcess)
-
-    if (timeout) {
-      setTimeout(() => {
-        resolve(Date.now() - now)
-      }, timeout)
+    if (options) {
+      if (options.processKey) {
+        context[options.processKey] = subProcess
+      }
+      if (options.maximumCpu || options.maximumMemory) {
+        timer = setInterval(() => {
+          pidusage(subProcess.pid, (error, stats) => {
+            if (error) {
+              cleanTimer()
+              reject(error)
+            } else {
+              if (options.maximumCpu) {
+                if (stats.cpu > options.maximumCpu) {
+                  cleanTimer()
+                  reject(new Error(`cpu ${stats.cpu} should <= ${options.maximumCpu}`))
+                }
+              } else if (options.maximumMemory) {
+                // tslint:disable-next-line:no-collapsible-if
+                if (stats.memory > options.maximumMemory) {
+                  cleanTimer()
+                  reject(new Error(`memory ${stats.memory} should <= ${options.maximumMemory}`))
+                }
+              }
+            }
+          })
+        }, 1000)
+      }
+      if (options.timeout) {
+        setTimeout(() => {
+          cleanTimer()
+          resolve(Date.now() - now)
+        }, options.timeout)
+      }
     }
   })
+}
+
+function getOptions(options?: Options | string): Options | undefined {
+  if (typeof options === 'string') {
+    return {
+      processKey: options
+    }
+  }
+  if (options) {
+    return options
+  }
+  return undefined
 }
 
 /**
@@ -135,11 +202,14 @@ export async function executeScriptAsync(script: Script, parameters: string[] = 
   } else if (script instanceof Service) {
     console.log(script.script)
     const now = Date.now()
-    executeStringScriptAsync(script.script, context, subProcesses, script.processKey)
+    executeStringScriptAsync(script.script, context, subProcesses, getOptions(script.options))
     return [{ time: Date.now() - now, script: script.script }]
   } else if (script instanceof Program) {
     console.log(script.script)
-    const time = await executeStringScriptAsync(script.script, context, subProcesses, script.processKey, script.timeout)
+    const time = await executeStringScriptAsync(script.script, context, subProcesses, {
+      timeout: script.timeout,
+      ...getOptions(script.options)
+    })
     return [{ time, script: script.script }]
   } else if (script instanceof Function) {
     const now = Date.now()

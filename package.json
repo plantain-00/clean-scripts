@@ -31,6 +31,7 @@
     "@types/jasmine": "3.3.13",
     "@types/minimist": "1.2.0",
     "@types/node": "12.6.2",
+    "@types/pidusage": "2.0.1",
     "@types/pretty-ms": "4.0.0",
     "clean-release": "2.7.0",
     "jasmine": "3.4.0",
@@ -46,6 +47,7 @@
   },
   "dependencies": {
     "minimist": "1.2.0",
+    "pidusage": "^2.0.17",
     "pretty-ms": "5.0.0",
     "tslib": "1"
   },

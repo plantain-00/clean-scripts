@@ -65,11 +65,7 @@ function cleanup() {
   }
 }
 
-executeCommandLine().then(() => {
-  cleanup()
-  console.log('script success.')
-  process.exit()
-}, error => {
+function handleError(error: unknown) {
   if (error instanceof Error) {
     console.log(error.message)
   } else {
@@ -77,6 +73,18 @@ executeCommandLine().then(() => {
   }
   cleanup()
   process.exit(1)
+}
+
+executeCommandLine().then(() => {
+  cleanup()
+  console.log('script success.')
+  process.exit()
+}, error => {
+  handleError(error)
+})
+
+process.on('unhandledRejection', (error) => {
+  handleError(error)
 })
 
 interface Ps {

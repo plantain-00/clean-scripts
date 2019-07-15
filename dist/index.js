@@ -59,11 +59,7 @@ function cleanup() {
         subProcess.kill('SIGINT');
     }
 }
-executeCommandLine().then(() => {
-    cleanup();
-    console.log('script success.');
-    process.exit();
-}, error => {
+function handleError(error) {
     if (error instanceof Error) {
         console.log(error.message);
     }
@@ -72,6 +68,16 @@ executeCommandLine().then(() => {
     }
     cleanup();
     process.exit(1);
+}
+executeCommandLine().then(() => {
+    cleanup();
+    console.log('script success.');
+    process.exit();
+}, error => {
+    handleError(error);
+});
+process.on('unhandledRejection', (error) => {
+    handleError(error);
 });
 function collectPids(pid, ps, result) {
     const children = ps.filter(p => p.ppid === pid);

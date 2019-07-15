@@ -13,8 +13,22 @@ export declare function readableStreamEnd(readable: stream.Readable): Promise<vo
  */
 export declare class Service {
     script: string;
-    processKey?: string | undefined;
-    constructor(script: string, processKey?: string | undefined);
+    options?: string | Options | undefined;
+    constructor(script: string, options?: string | Options | undefined);
+}
+/**
+ * @public
+ */
+export interface Options {
+    processKey?: string;
+    /**
+     * percent
+     */
+    maximumCpu?: number;
+    /**
+     * bytes
+     */
+    maximumMemory?: number;
 }
 /**
  * @public
@@ -22,8 +36,8 @@ export declare class Service {
 export declare class Program {
     script: string;
     timeout: number;
-    processKey?: string | undefined;
-    constructor(script: string, timeout: number, processKey?: string | undefined);
+    options?: string | Options | undefined;
+    constructor(script: string, timeout: number, options?: string | Options | undefined);
 }
 /**
  * @public
