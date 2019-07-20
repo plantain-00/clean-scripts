@@ -56,7 +56,9 @@ function cleanup() {
         }
     }
     for (const subProcess of subProcesses) {
-        subProcess.kill('SIGINT');
+        if (!subProcess.killed) {
+            subProcess.kill('SIGINT');
+        }
     }
 }
 function handleError(error) {

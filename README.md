@@ -179,7 +179,7 @@ module.exports = {
 }
 ```
 
-All programs will be killed(send `SIGINT` actually) after all scripts end, or any script errors.
+A program will be killed(send `SIGINT` actually) after the script end.
 
 The cpu and memory check runs every 1 second.
 

@@ -118,6 +118,7 @@ async function executeStringScriptAsync(script, context, subProcesses, options) 
             if (options.timeout) {
                 setTimeout(() => {
                     cleanTimer();
+                    subProcess.kill('SIGINT');
                     resolve(Date.now() - now);
                 }, options.timeout);
             }
