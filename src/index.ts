@@ -23,7 +23,6 @@ async function executeCommandLine() {
     return
   }
 
-  // tslint:disable-next-line:max-union-size
   const scripts: { [name: string]: Script | Script[] | Set<Script> | { [name: string]: Script } } = require(path.resolve(process.cwd(), argv.config || defaultConfigName))
 
   const scriptNames = argv._
@@ -32,7 +31,6 @@ async function executeCommandLine() {
   }
   const scriptName = scriptNames[0]
   const parameters = scriptNames.slice(1)
-  // tslint:disable-next-line:no-eval
   const scriptValues = scripts[scriptName] || eval('scripts.' + scriptName)
   if (!scriptValues) {
     throw new Error(`Unknown script name: ${scriptName}`)

@@ -82,11 +82,10 @@ export type Script = string | ((context: { [key: string]: any }, parameters: str
 /**
  * @public
  */
-export type Time = { time: number, script: string }
+export interface Time { time: number, script: string }
 
 import pidusage from 'pidusage'
 
-// tslint:disable-next-line:cognitive-complexity
 async function executeStringScriptAsync(
   script: string,
   context: { [key: string]: any },
@@ -133,7 +132,6 @@ async function executeStringScriptAsync(
                   reject(new Error(`cpu ${stats.cpu} should <= ${options.maximumCpu}`))
                 }
               } else if (options.maximumMemory) {
-                // tslint:disable-next-line:no-collapsible-if
                 if (stats.memory > options.maximumMemory) {
                   cleanTimer()
                   reject(new Error(`memory ${stats.memory} should <= ${options.maximumMemory}`))
@@ -169,7 +167,6 @@ function getOptions(options?: Options | string): Options | undefined {
 /**
  * @public
  */
-// tslint:disable-next-line:cognitive-complexity
 export async function executeScriptAsync(script: Script, parameters: string[] = [], context: { [key: string]: any } = {}, subProcesses: childProcess.ChildProcess[] = []): Promise<Time[]> {
   if (script === undefined || script === null) {
     return []
@@ -185,11 +182,7 @@ export async function executeScriptAsync(script: Script, parameters: string[] = 
     }
     return times
   } else if (script instanceof Set) {
-    const promises: Promise<Time[]>[] = []
-    for (const child of script) {
-      promises.push(executeScriptAsync(child, parameters, context, subProcesses))
-    }
-    const times = await Promise.all(promises)
+    const times = await Promise.all(Array.from(script).map((c) => executeScriptAsync(c, parameters, context, subProcesses)))
     let result: Time[] = []
     let maxTotalTime = 0
     for (const time of times) {
@@ -203,6 +196,7 @@ export async function executeScriptAsync(script: Script, parameters: string[] = 
   } else if (script instanceof Service) {
     console.log(script.script)
     const now = Date.now()
+    // eslint-disable-next-line plantain/promise-not-await
     executeStringScriptAsync(script.script, context, subProcesses, getOptions(script.options))
     return [{ time: Date.now() - now, script: script.script }]
   } else if (script instanceof Program) {
@@ -220,7 +214,7 @@ export async function executeScriptAsync(script: Script, parameters: string[] = 
     let remainTasks = script.tasks
     let currentTasks: Task[] = []
     const execuateTasks = async(): Promise<Time[]> => {
-      let tasks = getTasks(remainTasks, currentTasks, script.maxWorkerCount)
+      const tasks = getTasks(remainTasks, currentTasks, script.maxWorkerCount)
       currentTasks.push(...tasks.current)
       if (tasks.current.length > 0) {
         remainTasks = tasks.remain
@@ -240,13 +234,7 @@ export async function executeScriptAsync(script: Script, parameters: string[] = 
     }
     return times
   } else {
-    const promises: Promise<Time[]>[] = []
-    for (const key in script) {
-      if (script.hasOwnProperty(key)) {
-        promises.push(executeScriptAsync(script[key], parameters, context, subProcesses))
-      }
-    }
-    const times = await Promise.all(promises)
+    const times = await Promise.all(Object.keys((script)).map((key) => executeScriptAsync(script[key], parameters, context, subProcesses)))
     return getLongestTime(times)
   }
 }

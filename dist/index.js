@@ -20,7 +20,6 @@ async function executeCommandLine() {
         showToolVersion();
         return;
     }
-    // tslint:disable-next-line:max-union-size
     const scripts = require(path.resolve(process.cwd(), argv.config || defaultConfigName));
     const scriptNames = argv._;
     if (!scriptNames || scriptNames.length === 0) {
@@ -28,7 +27,6 @@ async function executeCommandLine() {
     }
     const scriptName = scriptNames[0];
     const parameters = scriptNames.slice(1);
-    // tslint:disable-next-line:no-eval
     const scriptValues = scripts[scriptName] || eval('scripts.' + scriptName);
     if (!scriptValues) {
         throw new Error(`Unknown script name: ${scriptName}`);

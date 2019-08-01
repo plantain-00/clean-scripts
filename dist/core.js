@@ -60,7 +60,6 @@ const util = tslib_1.__importStar(require("util"));
  */
 exports.execAsync = util.promisify(childProcess.exec);
 const pidusage_1 = tslib_1.__importDefault(require("pidusage"));
-// tslint:disable-next-line:cognitive-complexity
 async function executeStringScriptAsync(script, context, subProcesses, options) {
     return new Promise((resolve, reject) => {
         const now = Date.now();
@@ -105,7 +104,6 @@ async function executeStringScriptAsync(script, context, subProcesses, options) 
                                 }
                             }
                             else if (options.maximumMemory) {
-                                // tslint:disable-next-line:no-collapsible-if
                                 if (stats.memory > options.maximumMemory) {
                                     cleanTimer();
                                     reject(new Error(`memory ${stats.memory} should <= ${options.maximumMemory}`));
@@ -139,7 +137,6 @@ function getOptions(options) {
 /**
  * @public
  */
-// tslint:disable-next-line:cognitive-complexity
 async function executeScriptAsync(script, parameters = [], context = {}, subProcesses = []) {
     if (script === undefined || script === null) {
         return [];
@@ -158,11 +155,7 @@ async function executeScriptAsync(script, parameters = [], context = {}, subProc
         return times;
     }
     else if (script instanceof Set) {
-        const promises = [];
-        for (const child of script) {
-            promises.push(executeScriptAsync(child, parameters, context, subProcesses));
-        }
-        const times = await Promise.all(promises);
+        const times = await Promise.all(Array.from(script).map((c) => executeScriptAsync(c, parameters, context, subProcesses)));
         let result = [];
         let maxTotalTime = 0;
         for (const time of times) {
@@ -177,6 +170,7 @@ async function executeScriptAsync(script, parameters = [], context = {}, subProc
     else if (script instanceof Service) {
         console.log(script.script);
         const now = Date.now();
+        // eslint-disable-next-line plantain/promise-not-await
         executeStringScriptAsync(script.script, context, subProcesses, getOptions(script.options));
         return [{ time: Date.now() - now, script: script.script }];
     }
@@ -197,7 +191,7 @@ async function executeScriptAsync(script, parameters = [], context = {}, subProc
         let remainTasks = script.tasks;
         let currentTasks = [];
         const execuateTasks = async () => {
-            let tasks = getTasks(remainTasks, currentTasks, script.maxWorkerCount);
+            const tasks = getTasks(remainTasks, currentTasks, script.maxWorkerCount);
             currentTasks.push(...tasks.current);
             if (tasks.current.length > 0) {
                 remainTasks = tasks.remain;
@@ -218,13 +212,7 @@ async function executeScriptAsync(script, parameters = [], context = {}, subProc
         return times;
     }
     else {
-        const promises = [];
-        for (const key in script) {
-            if (script.hasOwnProperty(key)) {
-                promises.push(executeScriptAsync(script[key], parameters, context, subProcesses));
-            }
-        }
-        const times = await Promise.all(promises);
+        const times = await Promise.all(Object.keys((script)).map((key) => executeScriptAsync(script[key], parameters, context, subProcesses)));
         return getLongestTime(times);
     }
 }

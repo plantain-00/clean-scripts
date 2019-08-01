@@ -71,10 +71,10 @@ export declare type Script = string | ((context: {
 /**
  * @public
  */
-export declare type Time = {
+export interface Time {
     time: number;
     script: string;
-};
+}
 /**
  * @public
  */
