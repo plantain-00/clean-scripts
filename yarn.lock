@@ -200,13 +200,6 @@
   resolved "https://registry.yarnpkg.com/@types/pidusage/-/pidusage-2.0.1.tgz#45eb309be947dcfa177957ef662ce2a0a2311d48"
   integrity sha512-tYYcz/+5v/EGYT83C0pIXrJGOiVBLksQvxgJboG4nGqx/gZTvq0Ro4SkAjECqMk7L4Ww58VWB4j48qeYh4/YJg==
 
-"@types/pretty-ms@5.0.1":
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/@types/pretty-ms/-/pretty-ms-5.0.1.tgz#f2f0d7be58caf8613d149053d446e0282ae11ff3"
-  integrity sha512-FFR4uj0p47Yq6JCrOt7DCaiUJIw7t9Vh7wwt3bF6qq99QRqjSH/doEGZsIIgZqhDmwjBObVBkrn0ICm1pY+mPg==
-  dependencies:
-    pretty-ms "*"
-
 "@types/semver@^6.0.1":
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/@types/semver/-/semver-6.0.2.tgz#5e8b09f0e4af53034b1d0fb9977a277847836205"

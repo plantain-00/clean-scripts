@@ -32,7 +32,6 @@
     "@types/minimist": "1.2.0",
     "@types/node": "12.7.12",
     "@types/pidusage": "2.0.1",
-    "@types/pretty-ms": "5.0.1",
     "@typescript-eslint/eslint-plugin": "2.3.3",
     "@typescript-eslint/parser": "2.3.3",
     "clean-release": "2.7.0",
