@@ -46,9 +46,9 @@
     "typescript": "3.8.3"
   },
   "dependencies": {
-    "minimist": "1.2.5",
-    "pidusage": "2.0.18",
-    "pretty-ms": "6.0.1",
+    "minimist": "1",
+    "pidusage": "2",
+    "pretty-ms": "6",
     "tslib": "1"
   },
   "bin": {
