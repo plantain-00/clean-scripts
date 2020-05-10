@@ -1,9 +1,9 @@
-const { Service, checkGitStatus } = require('./dist/core')
+import { Service, checkGitStatus, Script } from './dist/core'
 
 const tsFiles = `"src/**/*.ts" "spec/**/*.ts"`
 const jsFiles = `"*.config.js"`
 
-module.exports = {
+export default {
   build: [
     `rimraf dist/`,
     `tsc -p src/`
@@ -24,4 +24,4 @@ module.exports = {
     () => checkGitStatus()
   ],
   fix: `eslint --ext .js,.ts ${tsFiles} ${jsFiles} --fix`
-}
+} as { [name: string]: Script }

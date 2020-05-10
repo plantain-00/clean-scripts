@@ -23,7 +23,14 @@ async function executeCommandLine() {
     return
   }
 
-  const scripts: { [name: string]: Script | Script[] | Set<Script> | { [name: string]: Script } } = require(path.resolve(process.cwd(), argv.config || defaultConfigName))
+  const configFilePath = path.resolve(process.cwd(), argv.config || defaultConfigName)
+  if (configFilePath.endsWith('.ts')) {
+    require('ts-node/register/transpile-only')
+  }
+  let scripts: { [name: string]: Script } = require(configFilePath)
+  if (scripts.default) {
+    scripts = scripts.default as { [name: string]: Script }
+  }
 
   const scriptNames = argv._
   if (!scriptNames || scriptNames.length === 0) {

@@ -20,7 +20,14 @@ async function executeCommandLine() {
         showToolVersion();
         return;
     }
-    const scripts = require(path.resolve(process.cwd(), argv.config || defaultConfigName));
+    const configFilePath = path.resolve(process.cwd(), argv.config || defaultConfigName);
+    if (configFilePath.endsWith('.ts')) {
+        require('ts-node/register/transpile-only');
+    }
+    let scripts = require(configFilePath);
+    if (scripts.default) {
+        scripts = scripts.default;
+    }
     const scriptNames = argv._;
     if (!scriptNames || scriptNames.length === 0) {
         throw new Error(`Need a script`);

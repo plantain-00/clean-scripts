@@ -8,7 +8,7 @@ module.exports = {
   exclude: [
   ],
   postScript: [
-    'cd "[dir]" && yarn --production',
-    'node [dir]/dist/index.js build'
+    'cd "[dir]" && yarn --production && yarn add ts-node -D',
+    'node [dir]/dist/index.js build --config clean-scripts.config.ts'
   ]
 }

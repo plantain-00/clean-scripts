@@ -5,12 +5,12 @@
   "main": "dist/core.js",
   "types": "dist/core.d.ts",
   "scripts": {
-    "build": "node dist/index.js build",
-    "lint": "node dist/index.js lint",
-    "test": "node dist/index.js test",
-    "fix": "node dist/index.js fix",
-    "lint:ts": "node dist/index.js lint.ts",
-    "test[0]": "node dist/index.js test[0]"
+    "build": "node dist/index.js build --config clean-scripts.config.ts",
+    "lint": "node dist/index.js lint --config clean-scripts.config.ts",
+    "test": "node dist/index.js test --config clean-scripts.config.ts",
+    "fix": "node dist/index.js fix --config clean-scripts.config.ts",
+    "lint:ts": "node dist/index.js lint.ts --config clean-scripts.config.ts",
+    "test[0]": "node dist/index.js test[0] --config clean-scripts.config.ts"
   },
   "repository": {
     "type": "git",
@@ -42,6 +42,7 @@
     "markdownlint-cli": "0.23.0",
     "no-unused-export": "1.10.3",
     "rimraf": "3.0.2",
+    "ts-node": "8.10.1",
     "type-coverage": "2.5.0",
     "typescript": "3.8.3"
   },
