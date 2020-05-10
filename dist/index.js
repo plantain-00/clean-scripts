@@ -5,11 +5,23 @@ const minimist_1 = tslib_1.__importDefault(require("minimist"));
 const childProcess = tslib_1.__importStar(require("child_process"));
 const path = tslib_1.__importStar(require("path"));
 const pretty_ms_1 = tslib_1.__importDefault(require("pretty-ms"));
+const fs = tslib_1.__importStar(require("fs"));
 const core_1 = require("./core");
 const packageJson = tslib_1.__importStar(require("../package.json"));
-const defaultConfigName = 'clean-scripts.config.js';
 function showToolVersion() {
     console.log(`Version: ${packageJson.version}`);
+}
+function statAsync(file) {
+    return new Promise((resolve) => {
+        fs.stat(file, (error, stats) => {
+            if (error) {
+                resolve(undefined);
+            }
+            else {
+                resolve(stats);
+            }
+        });
+    });
 }
 const subProcesses = [];
 const context = {};
@@ -20,7 +32,17 @@ async function executeCommandLine() {
         showToolVersion();
         return;
     }
-    const configFilePath = path.resolve(process.cwd(), argv.config || defaultConfigName);
+    let configFilePath;
+    if (argv.config) {
+        configFilePath = path.resolve(process.cwd(), argv.config);
+    }
+    else {
+        configFilePath = path.resolve(process.cwd(), 'clean-scripts.config.ts');
+        const stats = await statAsync(configFilePath);
+        if (!stats || !stats.isFile()) {
+            configFilePath = path.resolve(process.cwd(), 'clean-scripts.config.js');
+        }
+    }
     if (configFilePath.endsWith('.ts')) {
         require('ts-node/register/transpile-only');
     }

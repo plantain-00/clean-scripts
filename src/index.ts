@@ -2,13 +2,24 @@ import minimist from 'minimist'
 import * as childProcess from 'child_process'
 import * as path from 'path'
 import prettyMs from 'pretty-ms'
+import * as fs from 'fs'
 import { Script, executeScriptAsync } from './core'
 import * as packageJson from '../package.json'
 
-const defaultConfigName = 'clean-scripts.config.js'
-
 function showToolVersion() {
   console.log(`Version: ${packageJson.version}`)
+}
+
+function statAsync(file: string) {
+  return new Promise<fs.Stats | undefined>((resolve) => {
+    fs.stat(file, (error, stats) => {
+      if (error) {
+        resolve(undefined)
+      } else {
+        resolve(stats)
+      }
+    })
+  })
 }
 
 const subProcesses: childProcess.ChildProcess[] = []
@@ -23,7 +34,16 @@ async function executeCommandLine() {
     return
   }
 
-  const configFilePath = path.resolve(process.cwd(), argv.config || defaultConfigName)
+  let configFilePath: string
+  if (argv.config) {
+    configFilePath = path.resolve(process.cwd(), argv.config)
+  } else {
+    configFilePath = path.resolve(process.cwd(), 'clean-scripts.config.ts')
+    const stats = await statAsync(configFilePath)
+    if (!stats || !stats.isFile()) {
+      configFilePath = path.resolve(process.cwd(), 'clean-scripts.config.js')
+    }
+  }
   if (configFilePath.endsWith('.ts')) {
     require('ts-node/register/transpile-only')
   }

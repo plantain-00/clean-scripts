@@ -5,12 +5,12 @@
   "main": "dist/core.js",
   "types": "dist/core.d.ts",
   "scripts": {
-    "build": "node dist/index.js build --config clean-scripts.config.ts",
-    "lint": "node dist/index.js lint --config clean-scripts.config.ts",
-    "test": "node dist/index.js test --config clean-scripts.config.ts",
-    "fix": "node dist/index.js fix --config clean-scripts.config.ts",
-    "lint:ts": "node dist/index.js lint.ts --config clean-scripts.config.ts",
-    "test[0]": "node dist/index.js test[0] --config clean-scripts.config.ts"
+    "build": "node dist/index.js build",
+    "lint": "node dist/index.js lint",
+    "test": "node dist/index.js test",
+    "fix": "node dist/index.js fix",
+    "lint:ts": "node dist/index.js lint.ts",
+    "test[0]": "node dist/index.js test[0]"
   },
   "repository": {
     "type": "git",

@@ -29,11 +29,7 @@ run `clean-scripts build`, or `clean-scripts lint`
 
 or `clean-scripts build --config clean-scripts.config.js`
 
-## config
-
-+ `clean-scripts.config.js` in current work directory is default config file
-+ `module.exports =` and `module.exports.default =` are both supported in config file
-+ typescript config file is supported if `ts-node` is available: `clean-scripts build --config clean-scripts.config.ts`
+or `clean-scripts build --config clean-scripts.config.ts`
 
 ## features
 
