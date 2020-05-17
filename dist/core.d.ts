@@ -80,7 +80,7 @@ export interface Time {
  */
 export declare function executeScriptAsync(script: Script, parameters?: string[], context?: {
     [key: string]: any;
-}, subProcesses?: childProcess.ChildProcess[]): Promise<Time[]>;
+}, subProcesses?: childProcess.ChildProcess[], options?: childProcess.ExecOptions): Promise<Time[]>;
 /**
  * @public
  */

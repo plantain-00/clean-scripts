@@ -70,7 +70,7 @@ async function executeStringScriptAsync(script, context, subProcesses, options) 
                 clearInterval(timer);
             }
         };
-        const subProcess = childProcess.exec(script, { encoding: 'utf8' }, (error) => {
+        const subProcess = childProcess.exec(script, { encoding: 'utf8', ...options }, (error) => {
             cleanTimer();
             if (error) {
                 reject(error);
@@ -138,25 +138,25 @@ function getOptions(options) {
 /**
  * @public
  */
-async function executeScriptAsync(script, parameters = [], context = {}, subProcesses = []) {
+async function executeScriptAsync(script, parameters = [], context = {}, subProcesses = [], options) {
     if (script === undefined || script === null) {
         return [];
     }
     else if (typeof script === 'string') {
         console.log(script);
-        const time = await executeStringScriptAsync(script, context, subProcesses);
+        const time = await executeStringScriptAsync(script, context, subProcesses, options);
         return [{ time, script }];
     }
     else if (Array.isArray(script)) {
         const times = [];
         for (const child of script) {
-            const time = await executeScriptAsync(child, parameters, context, subProcesses);
+            const time = await executeScriptAsync(child, parameters, context, subProcesses, options);
             times.push(...time);
         }
         return times;
     }
     else if (script instanceof Set) {
-        const times = await Promise.all(Array.from(script).map((c) => executeScriptAsync(c, parameters, context, subProcesses)));
+        const times = await Promise.all(Array.from(script).map((c) => executeScriptAsync(c, parameters, context, subProcesses, options)));
         let result = [];
         let maxTotalTime = 0;
         for (const time of times) {
@@ -172,13 +172,17 @@ async function executeScriptAsync(script, parameters = [], context = {}, subProc
         console.log(script.script);
         const now = Date.now();
         // eslint-disable-next-line plantain/promise-not-await
-        executeStringScriptAsync(script.script, context, subProcesses, getOptions(script.options));
+        executeStringScriptAsync(script.script, context, subProcesses, {
+            ...options,
+            ...getOptions(script.options)
+        });
         return [{ time: Date.now() - now, script: script.script }];
     }
     else if (script instanceof Program) {
         console.log(script.script);
         const time = await executeStringScriptAsync(script.script, context, subProcesses, {
             timeout: script.timeout,
+            ...options,
             ...getOptions(script.options)
         });
         return [{ time, script: script.script }];
@@ -197,7 +201,7 @@ async function executeScriptAsync(script, parameters = [], context = {}, subProc
             if (tasks.current.length > 0) {
                 remainTasks = tasks.remain;
                 const times = await Promise.all(tasks.current.map(async (c) => {
-                    const time = await executeScriptAsync(c.script, parameters, context, subProcesses);
+                    const time = await executeScriptAsync(c.script, parameters, context, subProcesses, options);
                     currentTasks = currentTasks.filter((r) => r !== c);
                     const newTimes = await execuateTasks();
                     return [...time, ...newTimes];
@@ -213,7 +217,7 @@ async function executeScriptAsync(script, parameters = [], context = {}, subProc
         return times;
     }
     else {
-        const times = await Promise.all(Object.keys((script)).map((key) => executeScriptAsync(script[key], parameters, context, subProcesses)));
+        const times = await Promise.all(Object.keys((script)).map((key) => executeScriptAsync(script[key], parameters, context, subProcesses, options)));
         return getLongestTime(times);
     }
 }
