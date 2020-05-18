@@ -4,7 +4,6 @@ const tslib_1 = require("tslib");
 const minimist_1 = tslib_1.__importDefault(require("minimist"));
 const childProcess = tslib_1.__importStar(require("child_process"));
 const path = tslib_1.__importStar(require("path"));
-const pretty_ms_1 = tslib_1.__importDefault(require("pretty-ms"));
 const fs = tslib_1.__importStar(require("fs"));
 const core_1 = require("./core");
 const packageJson = tslib_1.__importStar(require("../package.json"));
@@ -61,13 +60,7 @@ async function executeCommandLine() {
         throw new Error(`Unknown script name: ${scriptName}`);
     }
     const times = await core_1.executeScriptAsync(scriptValues, parameters, context, subProcesses);
-    const totalTime = times.reduce((p, c) => p + c.time, 0);
-    console.log(`----------------total: ${pretty_ms_1.default(totalTime)}----------------`);
-    for (const { time, script } of times) {
-        const pecent = Math.round(100.0 * time / totalTime);
-        console.log(`${pretty_ms_1.default(time)} ${pecent}% ${script}`);
-    }
-    console.log(`----------------total: ${pretty_ms_1.default(totalTime)}----------------`);
+    core_1.logTimes(times);
 }
 function cleanup() {
     if (process.platform === 'darwin' || process.platform === 'linux') {

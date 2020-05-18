@@ -299,3 +299,15 @@ export async function checkGitStatus() {
     throw new Error(`generated files doesn't match.`)
   }
 }
+
+import prettyMs from 'pretty-ms'
+
+export function logTimes(times: Time[]) {
+  const totalTime = times.reduce((p, c) => p + c.time, 0)
+  console.log(`----------------total: ${prettyMs(totalTime)}----------------`)
+  for (const { time, script } of times) {
+    const pecent = Math.round(100.0 * time / totalTime)
+    console.log(`${prettyMs(time)} ${pecent}% ${script}`)
+  }
+  console.log(`----------------total: ${prettyMs(totalTime)}----------------`)
+}

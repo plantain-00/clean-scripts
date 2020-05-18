@@ -1,9 +1,8 @@
 import minimist from 'minimist'
 import * as childProcess from 'child_process'
 import * as path from 'path'
-import prettyMs from 'pretty-ms'
 import * as fs from 'fs'
-import { Script, executeScriptAsync } from './core'
+import { Script, executeScriptAsync, logTimes } from './core'
 import * as packageJson from '../package.json'
 
 function showToolVersion() {
@@ -63,13 +62,7 @@ async function executeCommandLine() {
     throw new Error(`Unknown script name: ${scriptName}`)
   }
   const times = await executeScriptAsync(scriptValues, parameters, context, subProcesses)
-  const totalTime = times.reduce((p, c) => p + c.time, 0)
-  console.log(`----------------total: ${prettyMs(totalTime)}----------------`)
-  for (const { time, script } of times) {
-    const pecent = Math.round(100.0 * time / totalTime)
-    console.log(`${prettyMs(time)} ${pecent}% ${script}`)
-  }
-  console.log(`----------------total: ${prettyMs(totalTime)}----------------`)
+  logTimes(times)
 }
 
 function cleanup() {

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkGitStatus = exports.executeScriptAsync = exports.execAsync = exports.Tasks = exports.Program = exports.Service = exports.readableStreamEnd = exports.sleep = void 0;
+exports.logTimes = exports.checkGitStatus = exports.executeScriptAsync = exports.execAsync = exports.Tasks = exports.Program = exports.Service = exports.readableStreamEnd = exports.sleep = void 0;
 const tslib_1 = require("tslib");
 /**
  * @public
@@ -270,3 +270,14 @@ async function checkGitStatus() {
     }
 }
 exports.checkGitStatus = checkGitStatus;
+const pretty_ms_1 = tslib_1.__importDefault(require("pretty-ms"));
+function logTimes(times) {
+    const totalTime = times.reduce((p, c) => p + c.time, 0);
+    console.log(`----------------total: ${pretty_ms_1.default(totalTime)}----------------`);
+    for (const { time, script } of times) {
+        const pecent = Math.round(100.0 * time / totalTime);
+        console.log(`${pretty_ms_1.default(time)} ${pecent}% ${script}`);
+    }
+    console.log(`----------------total: ${pretty_ms_1.default(totalTime)}----------------`);
+}
+exports.logTimes = logTimes;

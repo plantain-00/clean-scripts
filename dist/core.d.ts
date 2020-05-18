@@ -85,3 +85,4 @@ export declare function executeScriptAsync(script: Script, parameters?: string[]
  * @public
  */
 export declare function checkGitStatus(): Promise<void>;
+export declare function logTimes(times: Time[]): void;
