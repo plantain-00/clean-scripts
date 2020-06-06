@@ -1,6 +1,6 @@
 import { Service, checkGitStatus, Script } from './dist/core'
 
-const tsFiles = `"src/**/*.ts" "spec/**/*.ts"`
+const tsFiles = `"src/**/*.ts"`
 const jsFiles = `"*.config.js"`
 
 export default {
@@ -16,11 +16,8 @@ export default {
     typeCoverage: 'type-coverage -p src --strict'
   },
   test: [
-    `tsc -p spec`,
-    `jasmine`,
-    `tsc -p demo`,
-    new Service('node demo/index.js'),
-    'clean-release --config clean-run.config.js',
+    new Service('ts-node demo/index.ts'),
+    'clean-release --config clean-run.config.ts',
     () => checkGitStatus()
   ],
   fix: `eslint --ext .js,.ts ${tsFiles} ${jsFiles} --fix`
