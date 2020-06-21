@@ -10,6 +10,18 @@ const packageJson = tslib_1.__importStar(require("../package.json"));
 function showToolVersion() {
     console.log(`Version: ${packageJson.version}`);
 }
+function showHelp() {
+    console.log(`Version ${packageJson.version}
+Syntax:   clean-scripts [script name] [options]
+Examples: clean-scripts build
+          clean-scripts build --config clean-scripts.config.js
+          clean-scripts build --config clean-scripts.config.ts
+Options:
+ -h, --help                                         Print this message.
+ -v, --version                                      Print the version
+ --config                                           Config file
+`);
+}
 function statAsync(file) {
     return new Promise((resolve) => {
         fs.stat(file, (error, stats) => {
@@ -29,6 +41,10 @@ async function executeCommandLine() {
     const showVersion = argv.v || argv.version;
     if (showVersion) {
         showToolVersion();
+        return;
+    }
+    if (argv.h || argv.help) {
+        showHelp();
         return;
     }
     let configFilePath;

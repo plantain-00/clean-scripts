@@ -22,7 +22,7 @@
     "url": "https://github.com/plantain-00/clean-scripts/issues"
   },
   "typeCoverage": {
-    "atLeast": 97
+    "atLeast": 98.24
   },
   "homepage": "https://github.com/plantain-00/clean-scripts#readme",
   "devDependencies": {
@@ -41,7 +41,7 @@
     "no-unused-export": "1.10.3",
     "rimraf": "3.0.2",
     "ts-node": "8.10.2",
-    "type-coverage": "2.7.2",
+    "type-coverage": "2.8.1",
     "typescript": "3.9.5"
   },
   "dependencies": {

@@ -31,6 +31,14 @@ or `clean-scripts build --config clean-scripts.config.js`
 
 or `clean-scripts build --config clean-scripts.config.ts`
 
+## options
+
+key | description
+--- | ---
+--config | config file
+-h,--help | Print this message.
+-v,--version | Print the version
+
 ## features
 
 ### string script

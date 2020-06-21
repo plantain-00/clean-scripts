@@ -9,6 +9,19 @@ function showToolVersion() {
   console.log(`Version: ${packageJson.version}`)
 }
 
+function showHelp() {
+  console.log(`Version ${packageJson.version}
+Syntax:   clean-scripts [script name] [options]
+Examples: clean-scripts build
+          clean-scripts build --config clean-scripts.config.js
+          clean-scripts build --config clean-scripts.config.ts
+Options:
+ -h, --help                                         Print this message.
+ -v, --version                                      Print the version
+ --config                                           Config file
+`)
+}
+
 function statAsync(file: string) {
   return new Promise<fs.Stats | undefined>((resolve) => {
     fs.stat(file, (error, stats) => {
@@ -25,11 +38,23 @@ const subProcesses: childProcess.ChildProcess[] = []
 const context: { [key: string]: any } = {}
 
 async function executeCommandLine() {
-  const argv = minimist(process.argv.slice(2), { '--': true })
+  const argv = minimist(process.argv.slice(2), { '--': true }) as unknown as {
+    v?: unknown
+    version: unknown
+    h?: unknown
+    help?: unknown
+    config?: string
+    _: string[]
+  }
 
   const showVersion = argv.v || argv.version
   if (showVersion) {
     showToolVersion()
+    return
+  }
+
+  if (argv.h || argv.help) {
+    showHelp()
     return
   }
 
