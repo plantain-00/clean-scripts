@@ -311,3 +311,49 @@ export function logTimes(times: Time[]) {
   }
   console.log(`----------------total: ${prettyMs(totalTime)}----------------`)
 }
+
+import * as path from 'path'
+import glob from 'glob'
+
+interface PackageJson {
+  name: string
+  dependencies?: {[name: string]: string}
+  workspaces: string[]
+}
+
+/**
+ * @public
+ */
+export function readWorkspaceDependencies() {
+  const rootPackageJson: PackageJson = JSON.parse((fs.readFileSync(path.resolve(process.cwd(), 'package.json'))).toString())
+  const workspacesArray = rootPackageJson.workspaces.map((w) => glob.sync(w))
+  const flattenedWorkspaces = new Set<string>()
+  workspacesArray.forEach((workspace) => {
+    workspace.forEach((w) => {
+      flattenedWorkspaces.add(w)
+    })
+  })
+  const flattenedWorkspacesArray = Array.from(flattenedWorkspaces)
+  const packageJsons: PackageJson[] = []
+  const packageNames = new Set<string>()
+  for (const workspace of flattenedWorkspacesArray) {
+    const packageJson: PackageJson = JSON.parse((fs.readFileSync(path.resolve(workspace, 'package.json'))).toString())
+    packageJsons.push(packageJson)
+    packageNames.add(packageJson.name)
+  }
+  
+  return packageJsons.map((p, i) => {
+    let dependencies: string[] | undefined
+    if (p.dependencies) {
+      const workpaceDependencies = Object.keys(p.dependencies).filter((d) => packageNames.has(d))
+      if (workpaceDependencies.length > 0) {
+        dependencies = workpaceDependencies
+      }
+    }
+    return {
+      name: p.name,
+      path: flattenedWorkspacesArray[i],
+      dependencies
+    }
+  })
+}

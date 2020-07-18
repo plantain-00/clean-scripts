@@ -86,3 +86,11 @@ export declare function executeScriptAsync(script: Script, parameters?: string[]
  */
 export declare function checkGitStatus(): Promise<void>;
 export declare function logTimes(times: Time[]): void;
+/**
+ * @public
+ */
+export declare function readWorkspaceDependencies(): {
+    name: string;
+    path: string;
+    dependencies: string[] | undefined;
+}[];
