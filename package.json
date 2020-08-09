@@ -54,5 +54,8 @@
   },
   "bin": {
     "clean-scripts": "bin/clean-scripts"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   }
 }
