@@ -1,10 +1,18 @@
 # Change Log
 
+## [1.17.1](https://github.com/plantain-00/clean-scripts/compare/v1.17.0...v1.17.1) (2020-08-29)
+  
+* fix: do not crash if fail to kill process ([897687f](https://github.com/plantain-00/clean-scripts/commit/897687f4a47e19c3e9e49776ce4154e5c0111e36))
+* chore: update dependencies ([fb21238](https://github.com/plantain-00/clean-scripts/commit/fb212386d25db0c75133325a0e73d7fb322a1dfc)) ([38f2cd2](https://github.com/plantain-00/clean-scripts/commit/38f2cd2b1b58324cb82d607709474ce61b4bad36)) ([4017a38](https://github.com/plantain-00/clean-scripts/commit/4017a381b8493ba9a856e97aedcb750166b39074)) ([a5ec178](https://github.com/plantain-00/clean-scripts/commit/a5ec178ddd8c2ef8ae144f785f26c1c7b9c99d24)) ([60641a2](https://github.com/plantain-00/clean-scripts/commit/60641a2c725371897a191e64c5a4cea4b717340c)) ([e073121](https://github.com/plantain-00/clean-scripts/commit/e073121c5704ec215aaeffb20c7ea95cd7f3f424))
+* fix: add missing parserOptions ([9e9f8b7](https://github.com/plantain-00/clean-scripts/commit/9e9f8b7f82dab3da80ef96375f074d4660bd83ac))
+* build: add missing publishConfig ([42c6a99](https://github.com/plantain-00/clean-scripts/commit/42c6a9913f7c837b5ee6fcea59041cd009a1d715))
+* build: improve release script ([aee31ae](https://github.com/plantain-00/clean-scripts/commit/aee31aef2029543bccd583dde03afb38efa93604))
+* chore: add changelog ([3f4983e](https://github.com/plantain-00/clean-scripts/commit/3f4983ee44afdee10d30a291233a2c053f1f6b61))
+
 ## [1.17.0](https://github.com/plantain-00/clean-scripts/compare/v1.16.1...v1.17.0) (2020-07-18)
   
 * feat: add readWorkspaceDependencies ([c26127c](https://github.com/plantain-00/clean-scripts/commit/c26127c81d574d332f675d6f4380e3d1a499a2d0))
 * chore: update dependencies ([5870384](https://github.com/plantain-00/clean-scripts/commit/5870384c04858d0d9ecda29f7bf62d1ec4daed53)) ([2beb428](https://github.com/plantain-00/clean-scripts/commit/2beb428d2f41aa7317757d583747809c79c553bc))
-* chore(deps): bump lodash from 4.17.15 to 4.17.19 ([d669f20](https://github.com/plantain-00/clean-scripts/commit/d669f202d3c872571385a4d97d132f58ffb48333))
 * docs: add github ci badge ([b563927](https://github.com/plantain-00/clean-scripts/commit/b56392749986a1b719d70b9e011ec5257baa28aa))
 
 ## [1.16.1](https://github.com/plantain-00/clean-scripts/compare/v1.16.0...v1.16.1) (2020-07-07)
@@ -97,7 +105,7 @@
   
 * fix: clean all child process before exiting ([3afe8f3](https://github.com/plantain-00/clean-scripts/commit/3afe8f3b241392391e3bc1cbae87799b49ebccf7))
 
-## [1.9.0-alpha.0](https://github.com/plantain-00/clean-scripts/compare/v1.8.1...v1.9.0-alpha.0) (2018-05-16)
+### [1.9.0-alpha.0](https://github.com/plantain-00/clean-scripts/compare/v1.8.1...v1.9.0-alpha.0) (2018-05-16)
   
 * feat: add support of program ([c3bc761](https://github.com/plantain-00/clean-scripts/commit/c3bc76143602a64c5d96928a0adfb62ff1163f7a))
 * fix: CI failure on windows ([d4a2fbf](https://github.com/plantain-00/clean-scripts/commit/d4a2fbf10c6e3786109c32cc69e1fb3ac8c95036))
