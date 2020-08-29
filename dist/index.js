@@ -88,7 +88,12 @@ function cleanup() {
         const result = [];
         collectPids(process.pid, ps, result);
         for (const pid of result) {
-            childProcess.execSync(`kill -9 ${pid}`);
+            try {
+                childProcess.execSync(`kill -9 ${pid}`);
+            }
+            catch {
+                // do nothing
+            }
         }
     }
     for (const subProcess of subProcesses) {
