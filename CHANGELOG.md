@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.18.0](https://github.com/plantain-00/clean-scripts/compare/v1.17.1...v1.18.0) (2020-09-09)
+  
+* feat: improve time logger ([54082f3](https://github.com/plantain-00/clean-scripts/commit/54082f30e09f06a97870155219acf317d8c5a3e9))
+* chore: update dependencies ([736467e](https://github.com/plantain-00/clean-scripts/commit/736467e4bac837cd048edaac29835f39691a47f6))
+
 ## [1.17.1](https://github.com/plantain-00/clean-scripts/compare/v1.17.0...v1.17.1) (2020-08-29)
   
 * fix: do not crash if fail to kill process ([897687f](https://github.com/plantain-00/clean-scripts/commit/897687f4a47e19c3e9e49776ce4154e5c0111e36))
