@@ -271,14 +271,31 @@ async function checkGitStatus() {
 }
 exports.checkGitStatus = checkGitStatus;
 const pretty_ms_1 = tslib_1.__importDefault(require("pretty-ms"));
+const table_1 = require("table");
 function logTimes(times) {
     const totalTime = times.reduce((p, c) => p + c.time, 0);
-    console.log(`----------------total: ${pretty_ms_1.default(totalTime)}----------------`);
-    for (const { time, script } of times) {
-        const pecent = Math.round(100.0 * time / totalTime);
-        console.log(`${pretty_ms_1.default(time)} ${pecent}% ${script}`);
-    }
-    console.log(`----------------total: ${pretty_ms_1.default(totalTime)}----------------`);
+    console.info(table_1.table([
+        ['script', 'time', ''],
+        ...[{ time: totalTime, script: '' }, ...times].map(({ time, script }) => [
+            script,
+            pretty_ms_1.default(time),
+            Math.round(100.0 * time / totalTime) + '%',
+        ])
+    ], {
+        columns: {
+            0: {
+                alignment: 'center',
+                width: 50,
+                wrapWord: true
+            },
+            1: {
+                alignment: 'center',
+            },
+            2: {
+                alignment: 'center',
+            }
+        }
+    }));
 }
 exports.logTimes = logTimes;
 const path = tslib_1.__importStar(require("path"));

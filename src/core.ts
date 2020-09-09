@@ -223,12 +223,12 @@ export async function executeScriptAsync(
   } else if (script instanceof Tasks) {
     let remainTasks = script.tasks
     let currentTasks: Task[] = []
-    const execuateTasks = async(): Promise<Time[]> => {
+    const execuateTasks = async (): Promise<Time[]> => {
       const tasks = getTasks(remainTasks, currentTasks, script.maxWorkerCount)
       currentTasks.push(...tasks.current)
       if (tasks.current.length > 0) {
         remainTasks = tasks.remain
-        const times = await Promise.all(tasks.current.map(async(c) => {
+        const times = await Promise.all(tasks.current.map(async (c) => {
           const time = await executeScriptAsync(c.script, parameters, context, subProcesses, options)
           currentTasks = currentTasks.filter((r) => r !== c)
           const newTimes = await execuateTasks()
@@ -301,15 +301,35 @@ export async function checkGitStatus() {
 }
 
 import prettyMs from 'pretty-ms'
+import { table } from 'table'
 
 export function logTimes(times: Time[]) {
   const totalTime = times.reduce((p, c) => p + c.time, 0)
-  console.log(`----------------total: ${prettyMs(totalTime)}----------------`)
-  for (const { time, script } of times) {
-    const pecent = Math.round(100.0 * time / totalTime)
-    console.log(`${prettyMs(time)} ${pecent}% ${script}`)
-  }
-  console.log(`----------------total: ${prettyMs(totalTime)}----------------`)
+  console.info(table(
+    [
+      ['script', 'time', ''],
+      ...[{ time: totalTime, script: '' }, ...times].map(({ time, script }) => [
+        script,
+        prettyMs(time),
+        Math.round(100.0 * time / totalTime) + '%',
+      ])
+    ],
+    {
+      columns: {
+        0: {
+          alignment: 'center',
+          width: 50,
+          wrapWord: true
+        },
+        1: {
+          alignment: 'center',
+        },
+        2: {
+          alignment: 'center',
+        }
+      }
+    },
+  ))
 }
 
 import * as path from 'path'
@@ -317,7 +337,7 @@ import glob from 'glob'
 
 interface PackageJson {
   name: string
-  dependencies?: {[name: string]: string}
+  dependencies?: { [name: string]: string }
   workspaces: string[]
 }
 
@@ -341,7 +361,7 @@ export function readWorkspaceDependencies() {
     packageJsons.push(packageJson)
     packageNames.add(packageJson.name)
   }
-  
+
   return packageJsons.map((p, i) => {
     let dependencies: string[] | undefined
     if (p.dependencies) {

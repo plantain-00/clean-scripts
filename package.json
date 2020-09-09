@@ -23,7 +23,7 @@
     "url": "https://github.com/plantain-00/clean-scripts/issues"
   },
   "typeCoverage": {
-    "atLeast": 98.24
+    "atLeast": 99.09
   },
   "homepage": "https://github.com/plantain-00/clean-scripts#readme",
   "devDependencies": {
@@ -31,6 +31,7 @@
     "@types/minimist": "1.2.0",
     "@types/node": "14.6.4",
     "@types/pidusage": "2.0.1",
+    "@types/table": "5.0.0",
     "@typescript-eslint/eslint-plugin": "4.0.1",
     "@typescript-eslint/parser": "4.0.1",
     "clean-release": "2.14.0",
@@ -50,6 +51,7 @@
     "minimist": "1",
     "pidusage": "2",
     "pretty-ms": "7",
+    "table": "6",
     "tslib": "1 || 2"
   },
   "bin": {
