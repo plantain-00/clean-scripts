@@ -285,7 +285,7 @@ function logTimes(times) {
         columns: {
             0: {
                 alignment: 'center',
-                width: 50,
+                width: process.stdout.columns - 19,
                 wrapWord: true
             },
             1: {
