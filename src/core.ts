@@ -318,7 +318,7 @@ export function logTimes(times: Time[]) {
       columns: {
         0: {
           alignment: 'center',
-          width: process.stdout.columns - 19,
+          width: Math.max(process.stdout.columns - 19, 50),
           wrapWord: true
         },
         1: {
