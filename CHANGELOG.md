@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.18.1](https://github.com/plantain-00/clean-scripts/compare/v1.18.0...v1.18.1) (2020-09-13)
+  
+* feat: more flexible columns ([1296ef2](https://github.com/plantain-00/clean-scripts/commit/1296ef212ed711574f315bbfcdec98d61ecf2d87))
+* chore: update dependencies ([7c9bc70](https://github.com/plantain-00/clean-scripts/commit/7c9bc7006b923c8153b4e7df015ea6ee30fb0078))
+
 ## [1.18.0](https://github.com/plantain-00/clean-scripts/compare/v1.17.1...v1.18.0) (2020-09-09)
   
 * feat: improve time logger ([54082f3](https://github.com/plantain-00/clean-scripts/commit/54082f30e09f06a97870155219acf317d8c5a3e9))
