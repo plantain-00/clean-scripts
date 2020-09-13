@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.18.3](https://github.com/plantain-00/clean-scripts/compare/v1.18.2...v1.18.3) (2020-09-13)
+  
+* fix: ci failure ([cfa828e](https://github.com/plantain-00/clean-scripts/commit/cfa828e1f071536938b7a1d56863c4a64eb378be))
+
 ## [1.18.2](https://github.com/plantain-00/clean-scripts/compare/v1.18.1...v1.18.2) (2020-09-13)
   
 * fix: cil failure ([d24348a](https://github.com/plantain-00/clean-scripts/commit/d24348a6b198bddef9f28d6e8d07ef93a9dd63a3))
