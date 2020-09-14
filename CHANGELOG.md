@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.18.4](https://github.com/plantain-00/clean-scripts/compare/v1.18.3...v1.18.4) (2020-09-14)
+  
+* feat: improve table style ([99d82e1](https://github.com/plantain-00/clean-scripts/commit/99d82e1c79f76f3f77bf62c4d857d5c55a9505b6))
+
 ## [1.18.3](https://github.com/plantain-00/clean-scripts/compare/v1.18.2...v1.18.3) (2020-09-13)
   
 * fix: ci failure ([cfa828e](https://github.com/plantain-00/clean-scripts/commit/cfa828e1f071536938b7a1d56863c4a64eb378be))
