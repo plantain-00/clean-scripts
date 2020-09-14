@@ -286,7 +286,7 @@ function logTimes(times) {
         columns: {
             0: {
                 alignment: 'center',
-                width: Math.min(Math.max((process.stdout.columns || 0) - 20, 50), maxScriptLength),
+                width: process.stdout.columns ? Math.min(process.stdout.columns - 30, maxScriptLength) : Math.min(100, maxScriptLength),
                 wrapWord: true
             },
             1: {
