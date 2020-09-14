@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.18.5](https://github.com/plantain-00/clean-scripts/compare/v1.18.4...v1.18.5) (2020-09-14)
+  
+* chore: improve table style ([8b0c39e](https://github.com/plantain-00/clean-scripts/commit/8b0c39ef76f45edd5b24749c4b9ff86ed2d16d05))
+
 ## [1.18.4](https://github.com/plantain-00/clean-scripts/compare/v1.18.3...v1.18.4) (2020-09-14)
   
 * feat: improve table style ([99d82e1](https://github.com/plantain-00/clean-scripts/commit/99d82e1c79f76f3f77bf62c4d857d5c55a9505b6))
