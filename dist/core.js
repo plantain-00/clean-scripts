@@ -275,6 +275,14 @@ const table_1 = require("table");
 function logTimes(times) {
     const totalTime = times.reduce((p, c) => p + c.time, 0);
     const maxScriptLength = Math.max(...times.map((c) => c.script.length), 10);
+    let width;
+    if (process.stdout.columns) {
+        width = Math.min(process.stdout.columns - 30, maxScriptLength);
+    }
+    else {
+        width = Math.min(100, maxScriptLength);
+    }
+    width = Math.max(width, 20);
     console.info(table_1.table([
         ['script', 'time', ''],
         ...[{ time: totalTime, script: '' }, ...times].map(({ time, script }) => [
@@ -286,7 +294,7 @@ function logTimes(times) {
         columns: {
             0: {
                 alignment: 'center',
-                width: process.stdout.columns ? Math.min(process.stdout.columns - 30, maxScriptLength) : Math.min(100, maxScriptLength),
+                width,
                 wrapWord: true
             },
             1: {

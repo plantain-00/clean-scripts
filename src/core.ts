@@ -306,6 +306,13 @@ import { table } from 'table'
 export function logTimes(times: Time[]) {
   const totalTime = times.reduce((p, c) => p + c.time, 0)
   const maxScriptLength = Math.max(...times.map((c) => c.script.length), 10)
+  let width: number
+  if (process.stdout.columns) {
+    width = Math.min(process.stdout.columns - 30, maxScriptLength)
+  } else {
+    width = Math.min(100, maxScriptLength)
+  }
+  width = Math.max(width, 20)
   console.info(table(
     [
       ['script', 'time', ''],
@@ -319,7 +326,7 @@ export function logTimes(times: Time[]) {
       columns: {
         0: {
           alignment: 'center',
-          width: process.stdout.columns ? Math.min(process.stdout.columns - 30, maxScriptLength) : Math.min(100, maxScriptLength),
+          width,
           wrapWord: true
         },
         1: {
