@@ -274,7 +274,7 @@ const pretty_ms_1 = tslib_1.__importDefault(require("pretty-ms"));
 const table_1 = require("table");
 function logTimes(times) {
     const totalTime = times.reduce((p, c) => p + c.time, 0);
-    const maxScriptLength = Math.max(...times.map((c) => c.script.length));
+    const maxScriptLength = Math.max(...times.map((c) => c.script.length), 10);
     console.info(table_1.table([
         ['script', 'time', ''],
         ...[{ time: totalTime, script: '' }, ...times].map(({ time, script }) => [

@@ -305,7 +305,7 @@ import { table } from 'table'
 
 export function logTimes(times: Time[]) {
   const totalTime = times.reduce((p, c) => p + c.time, 0)
-  const maxScriptLength = Math.max(...times.map((c) => c.script.length))
+  const maxScriptLength = Math.max(...times.map((c) => c.script.length), 10)
   console.info(table(
     [
       ['script', 'time', ''],
