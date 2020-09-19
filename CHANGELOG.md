@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.18.6](https://github.com/plantain-00/clean-scripts/compare/v1.18.5...v1.18.6) (2020-09-19)
+  
+* fix: running in ci ([1015fcb](https://github.com/plantain-00/clean-scripts/commit/1015fcb0b1b73cc9a65afb780390cbde3e1cb696))
+* chore: update dependencies ([e61ea42](https://github.com/plantain-00/clean-scripts/commit/e61ea42505ab7c1b838b709adc4be02dcea2087d))
+
 ## [1.18.5](https://github.com/plantain-00/clean-scripts/compare/v1.18.4...v1.18.5) (2020-09-14)
   
 * chore: improve table style ([8b0c39e](https://github.com/plantain-00/clean-scripts/commit/8b0c39ef76f45edd5b24749c4b9ff86ed2d16d05))
