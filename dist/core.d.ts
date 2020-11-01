@@ -89,8 +89,4 @@ export declare function logTimes(times: Time[]): void;
 /**
  * @public
  */
-export declare function readWorkspaceDependencies(): {
-    name: string;
-    path: string;
-    dependencies: string[] | undefined;
-}[];
+export declare function readWorkspaceDependencies(): import("package-dependency-collect").Workspace[];

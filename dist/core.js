@@ -307,41 +307,11 @@ function logTimes(times) {
     }));
 }
 exports.logTimes = logTimes;
-const path = tslib_1.__importStar(require("path"));
-const glob_1 = tslib_1.__importDefault(require("glob"));
+const package_dependency_collect_1 = require("package-dependency-collect");
 /**
  * @public
  */
 function readWorkspaceDependencies() {
-    const rootPackageJson = JSON.parse((fs.readFileSync(path.resolve(process.cwd(), 'package.json'))).toString());
-    const workspacesArray = rootPackageJson.workspaces.map((w) => glob_1.default.sync(w));
-    const flattenedWorkspaces = new Set();
-    workspacesArray.forEach((workspace) => {
-        workspace.forEach((w) => {
-            flattenedWorkspaces.add(w);
-        });
-    });
-    const flattenedWorkspacesArray = Array.from(flattenedWorkspaces);
-    const packageJsons = [];
-    const packageNames = new Set();
-    for (const workspace of flattenedWorkspacesArray) {
-        const packageJson = JSON.parse((fs.readFileSync(path.resolve(workspace, 'package.json'))).toString());
-        packageJsons.push(packageJson);
-        packageNames.add(packageJson.name);
-    }
-    return packageJsons.map((p, i) => {
-        let dependencies;
-        if (p.dependencies) {
-            const workpaceDependencies = Object.keys(p.dependencies).filter((d) => packageNames.has(d));
-            if (workpaceDependencies.length > 0) {
-                dependencies = workpaceDependencies;
-            }
-        }
-        return {
-            name: p.name,
-            path: flattenedWorkspacesArray[i],
-            dependencies
-        };
-    });
+    return package_dependency_collect_1.readWorkspaceDependencies({ excludeNodeModules: true });
 }
 exports.readWorkspaceDependencies = readWorkspaceDependencies;
