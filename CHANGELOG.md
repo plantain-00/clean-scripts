@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.19.0](https://github.com/plantain-00/clean-scripts/compare/v1.18.7...v1.19.0) (2020-12-26)
+  
+* feat: custom function return value will also be executed ([0a32d3d](https://github.com/plantain-00/clean-scripts/commit/0a32d3df3a00a6577b7f5db69ad2ed3d19e75a11))
+* chore: update dependencies ([da14c87](https://github.com/plantain-00/clean-scripts/commit/da14c8725c468676938a2b9ac8e893394a6ce24f)) ([2613f01](https://github.com/plantain-00/clean-scripts/commit/2613f014f36157c161a661ca1d18580707336379)) ([1d368c1](https://github.com/plantain-00/clean-scripts/commit/1d368c1b4d4bf3b30bfc127596ea6b07421a1e08)) ([125ab17](https://github.com/plantain-00/clean-scripts/commit/125ab170111171db3648e9ce04980378b975c6c8)) ([c64b769](https://github.com/plantain-00/clean-scripts/commit/c64b76990c9c18d05ddf1d6bbc3c6e18d25a3a5e)) ([11c43ec](https://github.com/plantain-00/clean-scripts/commit/11c43ec14e26a9b1bfa4ed9a69433df6065e4b65)) ([558b4e1](https://github.com/plantain-00/clean-scripts/commit/558b4e1e9f16a0c80a173dfb7ba84c62fc14d2e8)) ([40983e3](https://github.com/plantain-00/clean-scripts/commit/40983e328d0951378194250a0649dbb6c23a3a39)) ([02cde3a](https://github.com/plantain-00/clean-scripts/commit/02cde3a8d2c19dad88445512b03eba438b481002)) ([851c814](https://github.com/plantain-00/clean-scripts/commit/851c8143fbce3ac452667cf55f770e88e0600d59)) ([49a5d0b](https://github.com/plantain-00/clean-scripts/commit/49a5d0ba2e954bffeeea839a28694eccf1be36cc)) ([ff77bb6](https://github.com/plantain-00/clean-scripts/commit/ff77bb68bbe4cb464ad850cbe2d5a321928a42c7)) ([7c8394d](https://github.com/plantain-00/clean-scripts/commit/7c8394d27451ec969b78f24a0ace3177b6dbe15f)) ([a219fc6](https://github.com/plantain-00/clean-scripts/commit/a219fc6ec644b8e8a4661fa04b40b8b69038b562))
+* refactor: reuse readWorkspaceDependencies ([4052ae2](https://github.com/plantain-00/clean-scripts/commit/4052ae2d277eb76bc22964a709f33d50fc053ae7))
+
 ## [1.18.7](https://github.com/plantain-00/clean-scripts/compare/v1.18.6...v1.18.7) (2020-09-19)
   
 * fix: ci failure ([3d46f9f](https://github.com/plantain-00/clean-scripts/commit/3d46f9f7a3b869f23a5d8dc80c3d0636c2adc834))
