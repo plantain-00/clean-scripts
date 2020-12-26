@@ -189,8 +189,13 @@ async function executeScriptAsync(script, parameters = [], context = {}, subProc
     }
     else if (script instanceof Function) {
         const now = Date.now();
-        await script(context, parameters);
-        return [{ time: Date.now() - now, script: script.name || 'custom function script' }];
+        const functionScript = await script(context, parameters);
+        const functionTime = { time: Date.now() - now, script: script.name || 'custom function script' };
+        const times = await executeScriptAsync(functionScript, parameters, context, subProcesses, options);
+        return [
+            functionTime,
+            ...times,
+        ];
     }
     else if (script instanceof Tasks) {
         let remainTasks = script.tasks;

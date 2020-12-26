@@ -65,9 +65,9 @@ export declare const execAsync: typeof childProcess.exec.__promisify__;
  */
 export declare type Script = string | ((context: {
     [key: string]: any;
-}, parameters: string[]) => Promise<void>) | any[] | Set<any> | Service | Program | Tasks | {
+}, parameters: string[]) => Promise<void | Script>) | any[] | Set<any> | Service | Program | Tasks | {
     [name: string]: any;
-} | null | undefined;
+} | null | undefined | void;
 /**
  * @public
  */
