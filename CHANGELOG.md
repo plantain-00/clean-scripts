@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.20.0](https://github.com/plantain-00/clean-scripts/compare/v1.19.0...v1.20.0) (2020-12-28)
+  
+* feat: custom function return name and times ([f93f649](https://github.com/plantain-00/clean-scripts/commit/f93f6491cebe7f3bc47cc0ca65873c3f6e988d51))
+
 ## [1.19.0](https://github.com/plantain-00/clean-scripts/compare/v1.18.7...v1.19.0) (2020-12-26)
   
 * feat: custom function return value will also be executed ([0a32d3d](https://github.com/plantain-00/clean-scripts/commit/0a32d3df3a00a6577b7f5db69ad2ed3d19e75a11))
