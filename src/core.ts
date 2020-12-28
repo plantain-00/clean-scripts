@@ -77,7 +77,16 @@ export const execAsync = util.promisify(childProcess.exec)
 /**
  * @public
  */
-export type Script = string | ((context: { [key: string]: any }, parameters: string[]) => Promise<void | Script>) | any[] | Set<any> | Service | Program | Tasks | { [name: string]: any } | null | undefined | void
+export type FunctionScriptReturnType = void | {
+  name?: string
+  times?: Time[]
+  script?: Script
+}
+
+/**
+ * @public
+ */
+export type Script = string | ((context: { [key: string]: any }, parameters: string[]) => Promise<FunctionScriptReturnType>) | any[] | Set<any> | Service | Program | Tasks | { [name: string]: any } | null | undefined | void
 
 /**
  * @public
@@ -174,7 +183,7 @@ export async function executeScriptAsync(
   subProcesses: childProcess.ChildProcess[] = [],
   options?: childProcess.ExecOptions
 ): Promise<Time[]> {
-  if (script === undefined || script === null) {
+  if (script === undefined || script === null || script === '') {
     return []
   } else if (typeof script === 'string') {
     console.log(script)
@@ -218,13 +227,21 @@ export async function executeScriptAsync(
     return [{ time, script: script.script }]
   } else if (script instanceof Function) {
     const now = Date.now()
-    const functionScript = await script(context, parameters)
+    const functionScriptResult = await script(context, parameters)
     const functionTime: Time = { time: Date.now() - now, script: script.name || 'custom function script' }
-    const times = await executeScriptAsync(functionScript, parameters, context, subProcesses, options)
+    if (!functionScriptResult) {
+      return [functionTime]
+    }
+    if (functionScriptResult.name) {
+      functionTime.script = functionScriptResult.name
+    }
+    const functionTimes = functionScriptResult.times || [functionTime]
+    const times = await executeScriptAsync(functionScriptResult.script, parameters, context, subProcesses, options)
     return [
-      functionTime,
+      ...functionTimes,
       ...times,
     ]
+    
   } else if (script instanceof Tasks) {
     let remainTasks = script.tasks
     let currentTasks: Task[] = []

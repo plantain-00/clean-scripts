@@ -63,9 +63,17 @@ export declare const execAsync: typeof childProcess.exec.__promisify__;
 /**
  * @public
  */
+export declare type FunctionScriptReturnType = void | {
+    name?: string;
+    times?: Time[];
+    script?: Script;
+};
+/**
+ * @public
+ */
 export declare type Script = string | ((context: {
     [key: string]: any;
-}, parameters: string[]) => Promise<void | Script>) | any[] | Set<any> | Service | Program | Tasks | {
+}, parameters: string[]) => Promise<FunctionScriptReturnType>) | any[] | Set<any> | Service | Program | Tasks | {
     [name: string]: any;
 } | null | undefined | void;
 /**

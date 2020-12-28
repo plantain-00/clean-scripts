@@ -139,7 +139,7 @@ function getOptions(options) {
  * @public
  */
 async function executeScriptAsync(script, parameters = [], context = {}, subProcesses = [], options) {
-    if (script === undefined || script === null) {
+    if (script === undefined || script === null || script === '') {
         return [];
     }
     else if (typeof script === 'string') {
@@ -189,11 +189,18 @@ async function executeScriptAsync(script, parameters = [], context = {}, subProc
     }
     else if (script instanceof Function) {
         const now = Date.now();
-        const functionScript = await script(context, parameters);
+        const functionScriptResult = await script(context, parameters);
         const functionTime = { time: Date.now() - now, script: script.name || 'custom function script' };
-        const times = await executeScriptAsync(functionScript, parameters, context, subProcesses, options);
+        if (!functionScriptResult) {
+            return [functionTime];
+        }
+        if (functionScriptResult.name) {
+            functionTime.script = functionScriptResult.name;
+        }
+        const functionTimes = functionScriptResult.times || [functionTime];
+        const times = await executeScriptAsync(functionScriptResult.script, parameters, context, subProcesses, options);
         return [
-            functionTime,
+            ...functionTimes,
             ...times,
         ];
     }

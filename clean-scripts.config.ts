@@ -2,7 +2,7 @@ import { Service, checkGitStatus, Script } from './dist/core'
 
 const tsFiles = `"src/**/*.ts"`
 
-export default {
+const config: { [name: string]: Script } = {
   build: [
     `rimraf dist/`,
     `tsc -p src/`
@@ -19,4 +19,6 @@ export default {
     () => checkGitStatus()
   ],
   fix: `eslint --ext .js,.ts ${tsFiles} --fix`
-} as { [name: string]: Script }
+}
+
+export default config

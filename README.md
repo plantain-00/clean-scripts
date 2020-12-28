@@ -98,7 +98,11 @@ module.exports = {
 
 ### custom function script
 
-the type of the function should be `(context: { [key: string]: any }, parameters: string[]) => Promise<void | Script>`
+the type of the function should be `(context: { [key: string]: any }, parameters: string[]) => Promise<void | {
+  name?: string
+  times?: Time[]
+  script?: Script
+}>`
 
 ```js
 module.exports = {
@@ -114,8 +118,6 @@ module.exports = {
 ```
 
 The `context` can be used to transfer data between different scripts.
-
-Custom function return value will also be executed.
 
 ```js
 module.exports = {
@@ -142,6 +144,8 @@ module.exports = {
     }
 }
 ```
+
+Custom function return value will also be executed.
 
 ### child script
 
