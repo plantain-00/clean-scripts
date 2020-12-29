@@ -226,6 +226,9 @@ export async function executeScriptAsync(
     })
     return [{ time, script: script.script }]
   } else if (script instanceof Function) {
+    if (script.name) {
+      console.info(script.name)
+    }
     const now = Date.now()
     const functionScriptResult = await script(context, parameters)
     const functionTime: Time = { time: Date.now() - now, script: script.name || 'custom function script' }
@@ -234,6 +237,7 @@ export async function executeScriptAsync(
     }
     if (functionScriptResult.name) {
       functionTime.script = functionScriptResult.name
+      console.info(functionScriptResult.name)
     }
     const functionTimes = functionScriptResult.times || [functionTime]
     const times = await executeScriptAsync(functionScriptResult.script, parameters, context, subProcesses, options)
