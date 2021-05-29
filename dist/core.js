@@ -27,6 +27,8 @@ exports.readableStreamEnd = readableStreamEnd;
  * @public
  */
 class Service {
+    script;
+    options;
     constructor(script, options) {
         this.script = script;
         this.options = options;
@@ -37,6 +39,9 @@ exports.Service = Service;
  * @public
  */
 class Program {
+    script;
+    timeout;
+    options;
     constructor(script, timeout, options) {
         this.script = script;
         this.timeout = timeout;
@@ -48,6 +53,8 @@ exports.Program = Program;
  * @public
  */
 class Tasks {
+    tasks;
+    maxWorkerCount;
     constructor(tasks, maxWorkerCount = Infinity) {
         this.tasks = tasks;
         this.maxWorkerCount = maxWorkerCount;
