@@ -99,6 +99,9 @@ async function executeStringScriptAsync(script, context, subProcesses, options) 
             }
             if (options.maximumCpu || options.maximumMemory) {
                 timer = setInterval(() => {
+                    if (subProcess.pid === undefined) {
+                        return;
+                    }
                     pidusage_1.default(subProcess.pid, (error, stats) => {
                         if (error) {
                             cleanTimer();
