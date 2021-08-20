@@ -28,11 +28,11 @@
   "homepage": "https://github.com/plantain-00/clean-scripts#readme",
   "devDependencies": {
     "@types/minimist": "1.2.2",
-    "@types/node": "16.4.13",
+    "@types/node": "16.7.0",
     "@types/pidusage": "2.0.1",
     "@types/table": "6.3.2",
-    "@typescript-eslint/eslint-plugin": "4.29.0",
-    "@typescript-eslint/parser": "4.29.0",
+    "@typescript-eslint/eslint-plugin": "4.29.2",
+    "@typescript-eslint/parser": "4.29.2",
     "clean-release": "2.15.2",
     "eslint": "7.32.0",
     "eslint-config-prettier": "8.3.0",
@@ -40,7 +40,7 @@
     "markdownlint-cli": "0.28.1",
     "no-unused-export": "1.14.2",
     "rimraf": "3.0.2",
-    "ts-node": "10.1.0",
+    "ts-node": "10.2.1",
     "tsconfig-plantain": "0.0.1",
     "type-coverage": "2.18.0",
     "typescript": "4.3.5"
