@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
-const minimist_1 = tslib_1.__importDefault(require("minimist"));
-const childProcess = tslib_1.__importStar(require("child_process"));
-const path = tslib_1.__importStar(require("path"));
-const fs = tslib_1.__importStar(require("fs"));
+const minimist_1 = (0, tslib_1.__importDefault)(require("minimist"));
+const childProcess = (0, tslib_1.__importStar)(require("child_process"));
+const path = (0, tslib_1.__importStar)(require("path"));
+const fs = (0, tslib_1.__importStar)(require("fs"));
 const core_1 = require("./core");
-const packageJson = tslib_1.__importStar(require("../package.json"));
+const packageJson = (0, tslib_1.__importStar)(require("../package.json"));
 function showToolVersion() {
     console.log(`Version: ${packageJson.version}`);
 }
@@ -37,7 +37,7 @@ function statAsync(file) {
 const subProcesses = [];
 const context = {};
 async function executeCommandLine() {
-    const argv = minimist_1.default(process.argv.slice(2), { '--': true });
+    const argv = (0, minimist_1.default)(process.argv.slice(2), { '--': true });
     const showVersion = argv.v || argv.version;
     if (showVersion) {
         showToolVersion();
@@ -75,8 +75,8 @@ async function executeCommandLine() {
     if (!scriptValues) {
         throw new Error(`Unknown script name: ${scriptName}`);
     }
-    const times = await core_1.executeScriptAsync(scriptValues, parameters, context, subProcesses);
-    core_1.logTimes(times);
+    const times = await (0, core_1.executeScriptAsync)(scriptValues, parameters, context, subProcesses);
+    (0, core_1.logTimes)(times);
 }
 function cleanup() {
     if (process.platform === 'darwin' || process.platform === 'linux') {

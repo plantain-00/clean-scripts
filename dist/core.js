@@ -61,13 +61,13 @@ class Tasks {
     }
 }
 exports.Tasks = Tasks;
-const childProcess = tslib_1.__importStar(require("child_process"));
-const util = tslib_1.__importStar(require("util"));
+const childProcess = (0, tslib_1.__importStar)(require("child_process"));
+const util = (0, tslib_1.__importStar)(require("util"));
 /**
  * @public
  */
 exports.execAsync = util.promisify(childProcess.exec);
-const pidusage_1 = tslib_1.__importDefault(require("pidusage"));
+const pidusage_1 = (0, tslib_1.__importDefault)(require("pidusage"));
 async function executeStringScriptAsync(script, context, subProcesses, options) {
     return new Promise((resolve, reject) => {
         const now = Date.now();
@@ -102,7 +102,7 @@ async function executeStringScriptAsync(script, context, subProcesses, options) 
                     if (subProcess.pid === undefined) {
                         return;
                     }
-                    pidusage_1.default(subProcess.pid, (error, stats) => {
+                    (0, pidusage_1.default)(subProcess.pid, (error, stats) => {
                         if (error) {
                             cleanTimer();
                             reject(error);
@@ -277,12 +277,12 @@ function getTasks(remainTasks, currentTasks, maxWorkerCount) {
     }
     return { current, remain };
 }
-const fs = tslib_1.__importStar(require("fs"));
+const fs = (0, tslib_1.__importStar)(require("fs"));
 /**
  * @public
  */
 async function checkGitStatus() {
-    const { stdout } = await exports.execAsync('git status -s');
+    const { stdout } = await (0, exports.execAsync)('git status -s');
     if (stdout) {
         console.log(stdout);
         const files = stdout.split('\n').filter(s => s.length > 0).map(s => s.substring(3));
@@ -296,7 +296,7 @@ async function checkGitStatus() {
     }
 }
 exports.checkGitStatus = checkGitStatus;
-const pretty_ms_1 = tslib_1.__importDefault(require("pretty-ms"));
+const pretty_ms_1 = (0, tslib_1.__importDefault)(require("pretty-ms"));
 const table_1 = require("table");
 function logTimes(times) {
     const totalTime = times.reduce((p, c) => p + c.time, 0);
@@ -309,11 +309,11 @@ function logTimes(times) {
         width = Math.min(100, maxScriptLength);
     }
     width = Math.max(width, 20);
-    console.info(table_1.table([
+    console.info((0, table_1.table)([
         ['script', 'time', ''],
         ...[{ time: totalTime, script: '' }, ...times].map(({ time, script }) => [
             script,
-            pretty_ms_1.default(time),
+            (0, pretty_ms_1.default)(time),
             Math.round(100.0 * time / totalTime) + '%',
         ])
     ], {
@@ -338,6 +338,6 @@ const package_dependency_collect_1 = require("package-dependency-collect");
  * @public
  */
 function readWorkspaceDependencies() {
-    return package_dependency_collect_1.readWorkspaceDependencies({ excludeNodeModules: true });
+    return (0, package_dependency_collect_1.readWorkspaceDependencies)({ excludeNodeModules: true });
 }
 exports.readWorkspaceDependencies = readWorkspaceDependencies;
