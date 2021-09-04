@@ -200,7 +200,7 @@ export async function executeScriptAsync(
     }
     return times
   } else if (script instanceof Set) {
-    const times = await Promise.all(Array.from(script).map((c) => executeScriptAsync(c, parameters, context, subProcesses, options)))
+    const times = await Promise.all(Array.from(script).map((c: Script) => executeScriptAsync(c, parameters, context, subProcesses, options)))
     let result: Time[] = []
     let maxTotalTime = 0
     for (const time of times) {

@@ -116,7 +116,7 @@ executeCommandLine().then(() => {
     cleanup();
     console.log('script success.');
     process.exit();
-}, error => {
+}, (error) => {
     handleError(error);
 });
 process.on('unhandledRejection', (error) => {

@@ -80,9 +80,9 @@ async function executeCommandLine() {
   if (!scriptNames || scriptNames.length === 0) {
     throw new Error(`Need a script`)
   }
-  const scriptName = scriptNames[0]
+  const scriptName = scriptNames[0]!
   const parameters = scriptNames.slice(1)
-  const scriptValues = scripts[scriptName] || eval('scripts.' + scriptName)
+  const scriptValues = scripts[scriptName] || (eval('scripts.' + scriptName) as Script)
   if (!scriptValues) {
     throw new Error(`Unknown script name: ${scriptName}`)
   }
@@ -96,7 +96,7 @@ function cleanup() {
     const ps = stdout.split('\n')
       .map(s => s.split(' ').filter(s => s))
       .filter((s, i) => i > 0 && s.length >= 2)
-      .map(s => ({ pid: +s[1], ppid: +s[2] }))
+      .map(s => ({ pid: +s[1]!, ppid: +s[2]! }))
     const result: number[] = []
     collectPids(process.pid, ps, result)
     for (const pid of result) {
@@ -128,7 +128,7 @@ executeCommandLine().then(() => {
   cleanup()
   console.log('script success.')
   process.exit()
-}, error => {
+}, (error: unknown) => {
   handleError(error)
 })
 
