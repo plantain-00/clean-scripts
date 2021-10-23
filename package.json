@@ -30,7 +30,6 @@
     "@types/minimist": "1.2.2",
     "@types/node": "16.11.2",
     "@types/pidusage": "2.0.1",
-    "@types/table": "6.3.2",
     "@typescript-eslint/eslint-plugin": "5.1.0",
     "@typescript-eslint/parser": "5.1.0",
     "clean-release": "2.15.2",

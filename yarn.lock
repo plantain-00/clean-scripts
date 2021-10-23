@@ -104,13 +104,6 @@
   resolved "https://registry.yarnpkg.com/@types/pidusage/-/pidusage-2.0.1.tgz#45eb309be947dcfa177957ef662ce2a0a2311d48"
   integrity sha512-tYYcz/+5v/EGYT83C0pIXrJGOiVBLksQvxgJboG4nGqx/gZTvq0Ro4SkAjECqMk7L4Ww58VWB4j48qeYh4/YJg==
 
-"@types/table@6.3.2":
-  version "6.3.2"
-  resolved "https://registry.yarnpkg.com/@types/table/-/table-6.3.2.tgz#e18ad2594400d81c3da28c31b342eb5a0d87a8e7"
-  integrity sha512-GJ82z3vQbx2BhiUo12w2A3lyBpXPJrGHjQ7iS5aH925098w8ojqiWBhgOUy97JS2PKLmRCTLT0sI+gJI4futig==
-  dependencies:
-    table "*"
-
 "@typescript-eslint/eslint-plugin@5.1.0":
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-5.1.0.tgz#381c188dfab12f7a2c7b6a8ba2402d6273eadeaa"
@@ -1480,7 +1473,7 @@ supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-table@*, table@6:
+table@6:
   version "6.7.2"
   resolved "https://registry.yarnpkg.com/table/-/table-6.7.2.tgz#a8d39b9f5966693ca8b0feba270a78722cbaf3b0"
   integrity sha512-UFZK67uvyNivLeQbVtkiUs8Uuuxv24aSL4/Vil2PJVtMgU8Lx0CYkP12uCGa3kjyQzOSgV1+z9Wkb82fCGsO0g==
