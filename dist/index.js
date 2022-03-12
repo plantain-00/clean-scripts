@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
-const minimist_1 = (0, tslib_1.__importDefault)(require("minimist"));
-const childProcess = (0, tslib_1.__importStar)(require("child_process"));
-const path = (0, tslib_1.__importStar)(require("path"));
-const fs = (0, tslib_1.__importStar)(require("fs"));
+const minimist_1 = tslib_1.__importDefault(require("minimist"));
+const childProcess = tslib_1.__importStar(require("child_process"));
+const path = tslib_1.__importStar(require("path"));
+const fs = tslib_1.__importStar(require("fs"));
 const core_1 = require("./core");
-const packageJson = (0, tslib_1.__importStar)(require("../package.json"));
+const packageJson = tslib_1.__importStar(require("../package.json"));
 function showToolVersion() {
     console.log(`Version: ${packageJson.version}`);
 }

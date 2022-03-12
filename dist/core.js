@@ -61,13 +61,13 @@ class Tasks {
     }
 }
 exports.Tasks = Tasks;
-const childProcess = (0, tslib_1.__importStar)(require("child_process"));
-const util = (0, tslib_1.__importStar)(require("util"));
+const childProcess = tslib_1.__importStar(require("child_process"));
+const util = tslib_1.__importStar(require("util"));
 /**
  * @public
  */
 exports.execAsync = util.promisify(childProcess.exec);
-const pidusage_1 = (0, tslib_1.__importDefault)(require("pidusage"));
+const pidusage_1 = tslib_1.__importDefault(require("pidusage"));
 async function executeStringScriptAsync(script, context, subProcesses, options) {
     return new Promise((resolve, reject) => {
         const now = Date.now();
@@ -277,7 +277,7 @@ function getTasks(remainTasks, currentTasks, maxWorkerCount) {
     }
     return { current, remain };
 }
-const fs = (0, tslib_1.__importStar)(require("fs"));
+const fs = tslib_1.__importStar(require("fs"));
 /**
  * @public
  */
@@ -296,7 +296,7 @@ async function checkGitStatus() {
     }
 }
 exports.checkGitStatus = checkGitStatus;
-const pretty_ms_1 = (0, tslib_1.__importDefault)(require("pretty-ms"));
+const pretty_ms_1 = tslib_1.__importDefault(require("pretty-ms"));
 const table_1 = require("table");
 function logTimes(times) {
     const totalTime = times.reduce((p, c) => p + c.time, 0);
