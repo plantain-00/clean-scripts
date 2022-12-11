@@ -59,7 +59,12 @@ async function executeCommandLine() {
         }
     }
     if (configFilePath.endsWith('.ts')) {
-        require('ts-node/register/transpile-only');
+        try {
+            require('ts-node/register/transpile-only');
+        }
+        catch {
+            require('@esbuild-kit/cjs-loader');
+        }
     }
     let scripts = require(configFilePath);
     if (scripts.default) {
