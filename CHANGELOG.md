@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.21.1](https://github.com/plantain-00/clean-scripts/compare/v1.21.0...v1.21.1) (2022-12-17)
+  
+* fix: dependency ([d51013f](https://github.com/plantain-00/clean-scripts/commit/d51013fff7765e9b2d28dcf14d46b0e66e81b671))
+
 ## [1.21.0](https://github.com/plantain-00/clean-scripts/compare/v1.20.2...v1.21.0) (2022-12-11)
   
 * feat: can use @esbuild-kit/cjs-loader ([0439ad9](https://github.com/plantain-00/clean-scripts/commit/0439ad9afa678776c826e9b022512100ca9a64a7))
